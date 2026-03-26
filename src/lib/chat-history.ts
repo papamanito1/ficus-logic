@@ -12,7 +12,7 @@ export interface ChatSession {
   updatedAt: number
 }
 
-const STORAGE_KEY = 'somika-chat-history'
+const STORAGE_KEY = 'sam-chat-history'
 
 function getStorageKey(userId: string) {
   return `${STORAGE_KEY}:${userId}`

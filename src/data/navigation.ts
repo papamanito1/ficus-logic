@@ -14,7 +14,7 @@ export const navigation: NavItem[] = [
   { label: 'Insights', href: '/insights' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
-  { label: 'Somika AI', href: '/somika-ai' },
+  { label: 'SAM', href: '/somika-ai' },
 ]
 
 export const footerNavigation = {
@@ -22,7 +22,7 @@ export const footerNavigation = {
     { label: 'Leadership Hiring', href: '/leadership-hiring' },
     { label: 'Niche Practices', href: '/niche-hiring' },
     { label: 'Industries', href: '/industries' },
-    { label: 'Somika AI', href: '/somika-ai' },
+    { label: 'SAM', href: '/somika-ai' },
   ],
   company: [
     { label: 'About', href: '/about' },

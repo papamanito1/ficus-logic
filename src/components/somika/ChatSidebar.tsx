@@ -84,7 +84,7 @@ export default function ChatSidebar({
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 pt-4 pb-3">
-              <span className="text-[13px] font-semibold text-white tracking-tight">Somika AI</span>
+              <span className="text-[13px] font-semibold text-white tracking-tight">SAM</span>
               <button
                 onClick={onToggle}
                 className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-neutral-800 transition-colors"

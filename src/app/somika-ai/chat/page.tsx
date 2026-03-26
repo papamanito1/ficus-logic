@@ -66,7 +66,7 @@ const EXAMPLES = [
   },
 ]
 
-export default function SomikaChatPage() {
+export default function SamChatPage() {
   const { data: session } = useSession()
   const userId = session?.user?.id
 
@@ -206,7 +206,7 @@ export default function SomikaChatPage() {
                 <div className="w-7 h-7 rounded-full bg-neutral-950 flex items-center justify-center">
                   <span className="text-[10px] font-bold text-white">S</span>
                 </div>
-                <span className="text-[13px] font-semibold text-neutral-900 tracking-tight">Somika</span>
+                <span className="text-[13px] font-semibold text-neutral-900 tracking-tight">SAM</span>
               </div>
             </div>
 
@@ -278,7 +278,7 @@ export default function SomikaChatPage() {
                     >
                       Describe a position or paste a JD.
                       <br />
-                      Somika handles the rest.
+                      SAM handles the rest.
                     </motion.p>
                   </motion.div>
 

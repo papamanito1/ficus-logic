@@ -76,7 +76,7 @@ function StatementSection() {
           transition={{ duration: 0.8, ease, delay: 0.4 }}
           className="text-body-lg text-center max-w-2xl mx-auto mt-8"
         >
-          Somika augments your search consultants with intelligence.
+          SAM augments your search consultants with intelligence.
           Not a replacement. A force multiplier.
         </motion.p>
       </div>
@@ -120,7 +120,7 @@ function ProductShowcase() {
                 <div className="w-7 h-7 rounded-full bg-neutral-950 flex items-center justify-center">
                   <span className="text-[10px] font-bold text-white">S</span>
                 </div>
-                <span className="text-sm font-semibold text-neutral-900">Somika</span>
+                <span className="text-sm font-semibold text-neutral-900">SAM</span>
                 <div className="ml-auto flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-brand-400" />
                   <span className="text-[11px] text-neutral-400">Ready</span>
@@ -183,13 +183,13 @@ function HowItWorks() {
       number: '01',
       title: 'Describe',
       headline: 'One conversation starts everything.',
-      body: 'Paste a job description or simply describe the role in natural language. Somika understands seniority, domain context, and location nuance.',
+      body: 'Paste a job description or simply describe the role in natural language. SAM understands seniority, domain context, and location nuance.',
     },
     {
       number: '02',
       title: 'Research',
       headline: 'AI does the heavy lifting.',
-      body: 'Somika generates sourcing strategies, Boolean search queries, multi-wave outreach plans, and ranked candidate profiles — in seconds.',
+      body: 'SAM generates sourcing strategies, Boolean search queries, multi-wave outreach plans, and ranked candidate profiles — in seconds.',
     },
     {
       number: '03',
@@ -262,7 +262,7 @@ function CapabilitiesSection() {
             Capabilities
           </p>
           <h2 className="text-display-md text-white">
-            What Somika brings to
+            What SAM brings to
             <br />
             <span className="text-neutral-500">every mandate.</span>
           </h2>
@@ -327,7 +327,7 @@ function NumbersSection() {
   )
 }
 
-export default function SomikaAIPage() {
+export default function SamAIPage() {
   const heroRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
@@ -367,7 +367,7 @@ export default function SomikaAIPage() {
               variants={heroChild}
               className="text-6xl sm:text-7xl lg:text-[100px] font-light tracking-[-0.04em] text-white leading-[0.95]"
             >
-              Somika
+              SAM
             </motion.h1>
 
             <motion.p
@@ -390,7 +390,7 @@ export default function SomikaAIPage() {
                            hover:shadow-2xl hover:shadow-white/10 hover:scale-[1.03]
                            active:scale-[0.98]"
               >
-                Try Somika AI
+                Try SAM
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                   <path d="M7 17 17 7M7 7h10v10" />
                 </svg>
@@ -445,7 +445,7 @@ export default function SomikaAIPage() {
               <span className="text-neutral-600">in action?</span>
             </h2>
             <p className="text-lg sm:text-xl text-neutral-500 mt-8 leading-relaxed max-w-lg mx-auto">
-              Open Somika. Describe any role.
+              Open SAM. Describe any role.
               <br />
               Results in seconds.
             </p>
@@ -460,7 +460,7 @@ export default function SomikaAIPage() {
                            hover:shadow-2xl hover:shadow-white/10 hover:scale-[1.03]
                            active:scale-[0.98]"
               >
-                Try Somika AI
+                Try SAM
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                   <path d="M7 17 17 7M7 7h10v10" />
                 </svg>

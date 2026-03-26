@@ -44,7 +44,7 @@ function escapeCsvField(field: string): string {
   return cleaned
 }
 
-export function downloadCsv(csv: string, filename = 'somika-candidates.csv') {
+export function downloadCsv(csv: string, filename = 'sam-candidates.csv') {
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
