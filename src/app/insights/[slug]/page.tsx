@@ -102,7 +102,7 @@ export default async function InsightArticlePage({ params }: PageProps) {
   return (
     <>
       {/* Article Hero */}
-      <section className="relative bg-gradient-to-br from-accent-900 via-accent-800 to-accent-700 pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-accent-900 via-accent-800 to-accent-700 pt-36 pb-20 sm:pt-44 sm:pb-28 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(141,198,63,0.12),transparent_50%)]" />
         <div className="container-narrow relative z-10">
           <AnimatedSection>

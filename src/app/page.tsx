@@ -104,7 +104,7 @@ export default function HomePage() {
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-accent-900 via-accent-800 to-accent-700 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(141,198,63,0.15),transparent_50%)]" />
 
-        <div className="container-premium relative z-10 text-center py-20">
+        <div className="container-premium relative z-10 text-center pt-28 pb-20">
           <motion.div initial="hidden" animate="visible" variants={heroStagger}>
             <motion.h1
               variants={heroItem}

@@ -45,15 +45,15 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
         )}
       >
         <div className="container-premium">
-          <div className="flex items-center justify-between h-[140px]">
+          <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link href="/" className="relative shrink-0">
               <Image
                 src="/images/logo.png"
                 alt="Ficus Logic"
-                width={480}
-                height={160}
-                className="h-[130px] w-auto"
+                width={240}
+                height={80}
+                className="h-12 w-auto"
                 priority
               />
             </Link>
@@ -132,7 +132,7 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               className="fixed top-0 right-0 bottom-0 z-40 w-[85vw] max-w-sm bg-white shadow-2xl lg:hidden"
             >
-              <div className="flex flex-col h-full pt-40 pb-8 px-8">
+              <div className="flex flex-col h-full pt-24 pb-8 px-8">
                 <nav className="flex flex-col gap-1">
                   {navigation.map((item, i) => (
                     <motion.div

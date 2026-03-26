@@ -21,7 +21,7 @@ const item = {
 
 export default function PageHero({ heading, subtitle }: PageHeroProps) {
   return (
-    <section className="relative bg-gradient-to-br from-accent-900 via-accent-800 to-accent-700 py-32 sm:py-40 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-accent-900 via-accent-800 to-accent-700 pt-40 sm:pt-48 pb-20 sm:pb-24 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(141,198,63,0.12),transparent_50%)]" />
 
       <div className="container-premium relative z-10 text-center">

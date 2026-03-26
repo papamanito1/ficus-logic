@@ -341,7 +341,7 @@ export default function SomikaAIPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(27,117,188,0.15),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(141,198,63,0.08),transparent_50%)]" />
 
-        <motion.div style={{ opacity: heroOpacity, scale: heroScale, y: heroY }} className="container-premium relative z-10 text-center py-20">
+        <motion.div style={{ opacity: heroOpacity, scale: heroScale, y: heroY }} className="container-premium relative z-10 text-center pt-28 pb-20">
           <motion.div initial="hidden" animate="visible" variants={heroStagger}>
             {/* Logo — large and prominent */}
             <motion.div variants={heroChild} className="relative mb-12 inline-block">

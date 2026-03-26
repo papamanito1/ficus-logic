@@ -14,9 +14,9 @@ export default function Footer() {
               <Image
                 src="/images/logo.png"
                 alt="Ficus Logic"
-                width={300}
-                height={100}
-                className="h-[80px] w-auto brightness-200"
+                width={180}
+                height={60}
+                className="h-10 w-auto brightness-200"
               />
             </Link>
             <p className="text-sm leading-relaxed text-neutral-500 max-w-xs">
