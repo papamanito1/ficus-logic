@@ -43,8 +43,9 @@ export default function ChatSidebar({
     <>
       {/* Toggle button — always visible */}
       <button
+        type="button"
         onClick={onToggle}
-        className="fixed top-3.5 left-3.5 z-[210] w-9 h-9 rounded-xl bg-white border border-neutral-200 flex items-center justify-center hover:bg-neutral-50 transition-colors shadow-sm"
+        className="fixed left-3.5 top-3.5 z-[210] flex h-10 w-10 items-center justify-center rounded-xl border border-neutral-200/80 bg-white/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.12)] backdrop-blur-md transition-colors hover:bg-white"
         aria-label={open ? 'Close sidebar' : 'Open sidebar'}
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-neutral-600">
