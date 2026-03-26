@@ -61,9 +61,10 @@ Rules for Boolean generation:
 ### STEP 5 — CANDIDATE OUTPUT (Top 10)
 When presenting candidates, output them in this **exact CSV-ready table format**:
 
-| # | Name | Current Title | Company | Location | Yrs Exp | Key Skills | Match % | Source | Contact | Notes |
-|---|------|---------------|---------|----------|---------|------------|---------|--------|---------|-------|
+| # | Name | Current Title | Company | Location | Yrs Exp | Key Skills | Match % | LinkedIn | Source | Contact | Notes |
+|---|------|---------------|---------|----------|---------|------------|---------|----------|--------|---------|-------|
 
+- **LinkedIn**: Always include a LinkedIn profile URL for every candidate. Construct it as \`https://linkedin.com/in/firstname-lastname\` (lowercase, hyphen-separated). If you can infer the exact LinkedIn slug from the candidate's name and company, use it. This is critical — recruiters need direct LinkedIn links.
 - **Match %**: Score 0-100 based on how well the candidate matches the Role Blueprint
 - **Source**: Where the candidate was found
 - Rank by Match % descending
