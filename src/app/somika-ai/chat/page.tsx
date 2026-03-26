@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChatMessage } from '@/components/somika/ChatMessage'
 import ChatSidebar from '@/components/somika/ChatSidebar'
+import { SamAvatar } from '@/components/somika/SamAvatar'
 import {
   getChatSessions,
   saveChatSession,
@@ -203,9 +204,7 @@ export default function SamChatPage() {
               </Link>
               <div className="w-px h-5 bg-neutral-200" />
               <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-full bg-neutral-950 flex items-center justify-center">
-                  <span className="text-[10px] font-bold text-white">S</span>
-                </div>
+                <SamAvatar size="sm" />
                 <span className="text-[13px] font-semibold text-neutral-900 tracking-tight">SAM</span>
               </div>
             </div>
@@ -258,8 +257,8 @@ export default function SamChatPage() {
                     className="text-center mb-16"
                   >
                     <motion.div variants={fadeUp} className="mb-10">
-                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-neutral-950">
-                        <span className="text-2xl font-light text-white">S</span>
+                      <div className="inline-flex items-center justify-center">
+                        <SamAvatar size="lg" className="shadow-md" />
                       </div>
                     </motion.div>
 
@@ -368,9 +367,7 @@ export default function SamChatPage() {
                         transition={{ duration: 0.25 }}
                         className="flex items-start gap-3 mb-4 pt-2"
                       >
-                        <div className="flex-none w-7 h-7 rounded-full bg-neutral-950 flex items-center justify-center">
-                          <span className="text-[10px] font-bold text-white">S</span>
-                        </div>
+                        <SamAvatar size="sm" className="mt-0.5" />
                         <div className="mt-2 flex gap-1">
                           {[0, 150, 300].map((delay) => (
                             <motion.span

@@ -3,6 +3,7 @@
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { CsvDownload } from './CsvDownload'
+import { SamAvatar } from './SamAvatar'
 
 interface ChatMessageProps {
   role: 'user' | 'assistant'
@@ -26,8 +27,8 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
 
   return (
     <div className="flex items-start gap-3.5 mb-7">
-      <div className="flex-none mt-0.5 w-7 h-7 rounded-full bg-neutral-950 flex items-center justify-center">
-        <span className="text-[10px] font-bold text-white">S</span>
+      <div className="flex-none mt-0.5">
+        <SamAvatar size="sm" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="prose prose-sm max-w-none

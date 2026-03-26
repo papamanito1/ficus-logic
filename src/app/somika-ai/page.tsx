@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Button from '@/components/ui/Button'
 import AnimatedSection from '@/components/ui/AnimatedSection'
+import { SamAvatar } from '@/components/somika/SamAvatar'
 
 const ease = [0.25, 0.4, 0.25, 1] as [number, number, number, number]
 
@@ -117,9 +118,7 @@ function ProductShowcase() {
               <div className="flex items-center gap-3 mb-4">
                 <Image src="/images/logo.png" alt="Ficus Logic" width={120} height={40} className="h-7 w-auto" />
                 <div className="w-px h-5 bg-neutral-200" />
-                <div className="w-7 h-7 rounded-full bg-neutral-950 flex items-center justify-center">
-                  <span className="text-[10px] font-bold text-white">S</span>
-                </div>
+                <SamAvatar size="sm" />
                 <span className="text-sm font-semibold text-neutral-900">SAM</span>
                 <div className="ml-auto flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-brand-400" />
@@ -138,9 +137,7 @@ function ProductShowcase() {
 
               {/* Assistant message */}
               <div className="flex items-start gap-3">
-                <div className="flex-none w-7 h-7 rounded-full bg-neutral-950 flex items-center justify-center">
-                  <span className="text-[10px] font-bold text-white">S</span>
-                </div>
+                <SamAvatar size="sm" className="mt-0.5" />
                 <div className="flex-1 space-y-3">
                   <p className="text-sm text-neutral-800 font-semibold">Role Blueprint: Senior React Developer</p>
                   <p className="text-[13px] text-neutral-500 leading-relaxed">
