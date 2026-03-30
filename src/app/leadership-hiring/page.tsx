@@ -57,7 +57,7 @@ export default function LeadershipHiringPage() {
         heading={
           <>
             <span className="block whitespace-nowrap">
-              Leadership mandate demands a unique Search Strategy,
+              Leadership mandate demands unique Search Strategy,
             </span>
             <span className="block whitespace-nowrap">
               Disciplined Search and Laser Sharp Execution
