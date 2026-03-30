@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import SectionHeading from '@/components/ui/SectionHeading'
 import AnimatedSection from '@/components/ui/AnimatedSection'
-import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import ImageContainer from '@/components/ui/ImageContainer'
 import PageHero from '@/components/PageHero'
@@ -11,24 +10,6 @@ export const metadata: Metadata = {
   description:
     'Disciplined executive search for leadership mandates. Precision hiring for senior roles that shape outcomes.',
 }
-
-const challenges = [
-  {
-    title: 'Stakeholder Complexity',
-    description:
-      'Multiple decision-makers. Competing priorities. Misaligned timelines.',
-  },
-  {
-    title: 'TALENT Scarcity',
-    description:
-      "The best leaders aren\u2019t looking. They need to be found.",
-  },
-  {
-    title: 'Closure Risk',
-    description:
-      'Last-mile failures cost more than the entire search.',
-  },
-]
 
 const approachPoints = [
   {
@@ -81,29 +62,6 @@ export default function LeadershipHiringPage() {
         }
         subtitle="Senior hiring is high-stakes. We treat it that way."
       />
-
-      {/* Why Leadership Hiring is Different */}
-      <section className="section-padding bg-white">
-        <div className="container-premium">
-          <SectionHeading
-            eyebrow="The Challenge"
-            heading="Not every search firm understands the stakes."
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 lg:mt-20">
-            {challenges.map((c, i) => (
-              <AnimatedSection key={c.title} delay={i * 0.1}>
-                <Card variant="surface" className="p-8 lg:p-10">
-                  <h3 className="text-xl font-medium text-neutral-900 mb-3">
-                    {c.title}
-                  </h3>
-                  <p className="text-body">{c.description}</p>
-                </Card>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Search Approach */}
       <section className="section-padding bg-neutral-50">
