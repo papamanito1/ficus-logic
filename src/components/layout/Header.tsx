@@ -78,7 +78,7 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
                 href="/contact"
                 className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium tracking-wide rounded-full transition-all duration-300 bg-neutral-900 text-white hover:bg-neutral-800 hover:shadow-lg hover:shadow-neutral-900/20"
               >
-                Reach Us
+                Work with Us
               </Link>
             </div>
 
@@ -159,7 +159,7 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
                     onClick={() => setMobileOpen(false)}
                     className="btn-primary w-full text-center"
                   >
-                    Reach Us
+                    Work with Us
                   </Link>
                 </div>
               </div>

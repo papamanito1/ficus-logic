@@ -163,7 +163,7 @@ export default function LeadershipHiringPage() {
                 variant="primary"
                 className="!bg-white !text-neutral-900 hover:!bg-neutral-200"
               >
-                Reach Us
+                Work with Us
               </Button>
             </div>
           </AnimatedSection>

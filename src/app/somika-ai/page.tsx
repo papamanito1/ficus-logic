@@ -395,7 +395,7 @@ export default function SamAIPage() {
                 </svg>
               </Link>
               <Button href="/contact" variant="ghost" className="!text-neutral-500 hover:!text-white">
-                Reach Us
+                Work with Us
               </Button>
             </motion.div>
           </motion.div>
@@ -469,7 +469,7 @@ export default function SamAIPage() {
                 variant="ghost"
                 className="!text-neutral-500 hover:!text-white"
               >
-                Reach Us
+                Work with Us
               </Button>
             </div>
           </AnimatedSection>
