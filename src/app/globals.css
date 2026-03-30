@@ -104,6 +104,15 @@
     @apply text-4xl sm:text-5xl lg:text-6xl font-light leading-[1.1] tracking-[-0.02em];
   }
 
+  /** Leadership hero: scales with viewport so two lines fit without horizontal scroll. */
+  .text-headline-leadership-hero {
+    @apply mx-auto font-light text-white text-center;
+    max-width: min(100%, 52rem);
+    line-height: 1.16;
+    letter-spacing: -0.025em;
+    font-size: clamp(0.6875rem, 0.4rem + 2.85vw, 3.65rem);
+  }
+
   .text-display-md {
     @apply text-3xl sm:text-4xl lg:text-5xl font-light leading-[1.15] tracking-[-0.01em];
   }

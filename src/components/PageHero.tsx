@@ -2,12 +2,13 @@
 
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 interface PageHeroProps {
   heading: ReactNode
   subtitle?: string
-  /** Each line is one row (whitespace-nowrap spans); narrow screens scroll horizontally. */
-  headingTwoLineLock?: boolean
+  /** Replaces default display sizing (e.g. fluid leadership headline). */
+  headingClassName?: string
 }
 
 const ease: [number, number, number, number] = [0.25, 0.4, 0.25, 1]
@@ -25,7 +26,7 @@ const item = {
 export default function PageHero({
   heading,
   subtitle,
-  headingTwoLineLock = false,
+  headingClassName,
 }: PageHeroProps) {
   return (
     <section className="relative bg-gradient-to-br from-accent-900 via-accent-800 to-accent-700 pt-44 sm:pt-52 pb-20 sm:pb-24 overflow-hidden">
@@ -33,23 +34,16 @@ export default function PageHero({
 
       <div className="container-premium relative z-10 text-center">
         <motion.div initial="hidden" animate="visible" variants={stagger}>
-          {headingTwoLineLock ? (
-            <div className="w-full overflow-x-auto [-webkit-overflow-scrolling:touch] [scrollbar-width:thin]">
-              <motion.h1
-                variants={item}
-                className="text-display-lg text-white mx-auto min-w-min max-w-none px-4 text-center"
-              >
-                {heading}
-              </motion.h1>
-            </div>
-          ) : (
-            <motion.h1
-              variants={item}
-              className="text-display-lg text-white max-w-4xl mx-auto"
-            >
-              {heading}
-            </motion.h1>
-          )}
+          <motion.h1
+            variants={item}
+            className={cn(
+              'mx-auto px-1 text-white sm:px-2',
+              headingClassName ??
+                'text-display-lg max-w-4xl',
+            )}
+          >
+            {heading}
+          </motion.h1>
 
           {subtitle && (
             <motion.p
