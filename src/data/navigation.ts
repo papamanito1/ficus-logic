@@ -8,7 +8,7 @@ export interface NavItem {
 export const navigation: NavItem[] = [
   { label: 'Leadership Hiring', href: '/leadership-hiring' },
   { label: 'Niche Practices', href: '/niche-hiring' },
-  { label: 'Industries', href: '/industries' },
+  { label: 'Industry', href: '/industries' },
   { label: 'Global Presence', href: '/global-presence' },
   { label: 'Careers', href: '/careers' },
   { label: 'Insights', href: '/insights' },
