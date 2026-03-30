@@ -70,6 +70,8 @@ export default function LeadershipHiringPage() {
             eyebrow="The Philosophy"
             heading="Research | Understand | Connect | Deliver"
             align="left"
+            className="max-w-none overflow-x-auto [-webkit-overflow-scrolling:touch]"
+            headingClassName="whitespace-nowrap"
           />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 mt-16 lg:mt-20 items-center">

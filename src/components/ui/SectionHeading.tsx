@@ -9,6 +9,8 @@ interface SectionHeadingProps {
   heading?: string
   subtitle?: string
   className?: string
+  /** Extra classes for the h2 (e.g. whitespace-nowrap for a single-line heading). */
+  headingClassName?: string
   align?: 'left' | 'center'
 }
 
@@ -17,6 +19,7 @@ export default function SectionHeading({
   heading,
   subtitle,
   className,
+  headingClassName,
   align = 'center',
 }: SectionHeadingProps) {
   const ref = useRef<HTMLDivElement>(null)
@@ -46,7 +49,7 @@ export default function SectionHeading({
             ease: [0.25, 0.4, 0.25, 1],
             delay: eyebrow ? 0.1 : 0,
           }}
-          className="text-display-md text-neutral-900"
+          className={cn('text-display-md text-neutral-900', headingClassName)}
         >
           {heading}
         </motion.h2>
