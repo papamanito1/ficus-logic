@@ -1,6 +1,6 @@
 import { streamText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
-import { SAM_SYSTEM_PROMPT } from '@/lib/sam-prompt'
+import { FELIX_SYSTEM_PROMPT } from '@/lib/sam-prompt'
 
 const openrouter = createOpenAI({
   apiKey: process.env.OPENROUTER_API_KEY ?? '',
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: openrouter(MODEL),
-    system: SAM_SYSTEM_PROMPT,
+    system: FELIX_SYSTEM_PROMPT,
     messages,
     temperature: 0.4,
     maxTokens: 4096,

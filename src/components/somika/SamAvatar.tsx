@@ -14,7 +14,7 @@ export interface SamAvatarProps {
   className?: string
 }
 
-/** Cute cartoon face for SAM — scales cleanly at sm / md / lg. */
+/** Cute cartoon face for FELIX — scales cleanly at sm / md / lg. */
 export function SamAvatar({ size = 'sm', className }: SamAvatarProps) {
   const uid = useId().replace(/:/g, '')
   const gradId = `sam-face-${uid}`
@@ -27,7 +27,7 @@ export function SamAvatar({ size = 'sm', className }: SamAvatarProps) {
         className,
       )}
       role="img"
-      aria-label="SAM"
+      aria-label="FELIX"
     >
       <svg
         className="h-full w-full"

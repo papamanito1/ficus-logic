@@ -16,7 +16,7 @@ export function SamBadge({
           className,
         )}
       >
-        <span className="text-[1.65rem] font-light tracking-tight text-white">S</span>
+        <span className="text-[1.65rem] font-light tracking-tight text-white">F</span>
       </div>
     )
   }
@@ -28,7 +28,7 @@ export function SamBadge({
         className,
       )}
     >
-      <span className="text-[10px] font-semibold tracking-tight text-white">S</span>
+      <span className="text-[10px] font-semibold tracking-tight text-white">F</span>
     </div>
   )
 }

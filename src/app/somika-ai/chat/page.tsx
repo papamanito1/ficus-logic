@@ -215,7 +215,7 @@ export default function SamChatPage() {
               <div className="flex items-center gap-2.5">
                 <SamBadge size="sm" />
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[13px] font-semibold tracking-tight text-neutral-900">SAM AI</span>
+                  <span className="text-[13px] font-semibold tracking-tight text-neutral-900">FELIX</span>
                   <span className="hidden text-[10px] font-medium uppercase tracking-[0.16em] text-neutral-400 sm:block">
                     Recruitment intelligence
                   </span>
@@ -295,7 +295,7 @@ export default function SamChatPage() {
                       className="mx-auto mt-6 max-w-md text-[15px] font-light leading-relaxed text-neutral-500"
                     >
                       Describe a mandate or paste a job description.
-                      <span className="text-neutral-400"> SAM AI structures the search.</span>
+                      <span className="text-neutral-400"> FELIX structures the search.</span>
                     </motion.p>
                   </motion.div>
 

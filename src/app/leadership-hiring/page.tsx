@@ -32,11 +32,11 @@ const approachPoints = [
 
 const evaluationBlocks = [
   {
-    title: 'Competency Mapping',
-    text: 'Technical and leadership depth mapped against mandate.',
+    title: 'Talent Mapping',
+    text: 'Access to Global and Local Talent Pool.',
   },
   {
-    title: 'Cultural Alignment',
+    title: 'Organization Fit',
     text: 'Leadership style assessed for organizational fit.',
   },
   {
@@ -105,7 +105,7 @@ export default function LeadershipHiringPage() {
         <div className="container-premium">
           <SectionHeading
             eyebrow="Assessment"
-            heading="Evaluation built on context, not templates."
+            heading="Evaluation Built on Context and Experience."
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-16 lg:mt-20">
