@@ -49,7 +49,10 @@ export default function SectionHeading({
             ease: [0.25, 0.4, 0.25, 1],
             delay: eyebrow ? 0.1 : 0,
           }}
-          className={cn('text-display-md text-neutral-900', headingClassName)}
+          className={cn(
+            'text-neutral-900',
+            headingClassName ?? 'text-display-md',
+          )}
         >
           {heading}
         </motion.h2>

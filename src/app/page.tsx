@@ -106,19 +106,14 @@ export default function HomePage() {
 
         <div className="container-premium relative z-10 text-center pt-44 pb-20">
           <motion.div initial="hidden" animate="visible" variants={heroStagger}>
-            <div className="w-full overflow-x-auto [-webkit-overflow-scrolling:touch] [scrollbar-width:thin]">
-              <motion.h1
-                variants={heroItem}
-                className="text-display-xl text-white mx-auto min-w-min max-w-none px-4 text-center"
-              >
-                <span className="block whitespace-nowrap">
-                  Leadership and Niche hiring
-                </span>
-                <span className="block whitespace-nowrap">
-                  requires sharper judgment.
-                </span>
-              </motion.h1>
-            </div>
+            <motion.h1
+              variants={heroItem}
+              className="text-headline-home-hero px-4"
+            >
+              Leadership and Niche hiring
+              <br />
+              requires sharper judgment.
+            </motion.h1>
 
             <motion.p
               variants={heroItemFast}
