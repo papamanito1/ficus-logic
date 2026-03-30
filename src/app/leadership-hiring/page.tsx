@@ -53,11 +53,15 @@ export default function LeadershipHiringPage() {
   return (
     <>
       <PageHero
+        headingTwoLineLock
         heading={
           <>
-            Leadership mandate demands a unique Search Strategy,
-            <br />
-            Disciplined Search and Laser Sharp Execution
+            <span className="block whitespace-nowrap">
+              Leadership mandate demands a unique Search Strategy,
+            </span>
+            <span className="block whitespace-nowrap">
+              Disciplined Search and Laser Sharp Execution
+            </span>
           </>
         }
         subtitle="Senior hiring is high-stakes. We treat it that way."
