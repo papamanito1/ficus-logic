@@ -104,13 +104,19 @@
     @apply text-4xl sm:text-5xl lg:text-6xl font-light leading-[1.1] tracking-[-0.02em];
   }
 
-  /** Leadership hero: two lines, no horizontal scroll — size tracks viewport width. */
+  /**
+   * Leadership hero: exactly two rows (each line is nowrap).
+   * Font size derived from usable width so the long first line fits (no extra wraps, no scroll).
+   */
   .text-headline-leadership-hero {
-    @apply mx-auto font-light text-white text-center;
-    max-width: min(100%, 52rem);
-    line-height: 1.13;
-    letter-spacing: -0.028em;
-    font-size: clamp(0.8125rem, 0.4rem + 2.25vw, 3.5rem);
+    @apply mx-auto w-full max-w-full font-light text-white text-center;
+    line-height: 1.14;
+    letter-spacing: -0.034em;
+    font-size: clamp(
+      0.625rem,
+      calc((min(100vw, 80rem) - 3.5rem) / 26),
+      3.35rem
+    );
   }
 
   /** Home hero: two lines, no horizontal scroll. */
