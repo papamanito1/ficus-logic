@@ -1,9 +1,10 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 
 interface PageHeroProps {
-  heading: string
+  heading: ReactNode
   subtitle?: string
 }
 
