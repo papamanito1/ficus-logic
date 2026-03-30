@@ -19,7 +19,7 @@ const challenges = [
       'Multiple decision-makers. Competing priorities. Misaligned timelines.',
   },
   {
-    title: 'Candidate Scarcity',
+    title: 'TALENT Scarcity',
     description:
       "The best leaders aren\u2019t looking. They need to be found.",
   },
@@ -32,7 +32,7 @@ const challenges = [
 
 const approachPoints = [
   {
-    title: 'Mandate Clarity',
+    title: 'Clarity',
     text: 'Every search starts with structured scoping. Role, context, and stakes\u2014defined upfront.',
   },
   {
@@ -40,11 +40,11 @@ const approachPoints = [
     text: 'We map the full leadership landscape. Not just active candidates.',
   },
   {
-    title: 'Candidate Assessment',
+    title: 'Assessment',
     text: 'Evaluation goes beyond credentials and interviews. Context, judgment, and fit determine shortlists.',
   },
   {
-    title: 'Closure Management',
+    title: 'Engagement and Onboarding',
     text: 'Alignment is managed, not assumed. Timelines stay disciplined throughout.',
   },
 ]
@@ -72,7 +72,7 @@ export default function LeadershipHiringPage() {
   return (
     <>
       <PageHero
-        heading="Leadership mandates demand disciplined search."
+        heading="Each Leadership mandate demands a unique Search Strategy, disciplined search and laser sharp execution."
         subtitle="Senior hiring is high-stakes. We treat it that way."
       />
 
@@ -103,8 +103,8 @@ export default function LeadershipHiringPage() {
       <section className="section-padding bg-neutral-50">
         <div className="container-premium">
           <SectionHeading
-            eyebrow="Our Approach"
-            heading="Built for mandates that matter."
+            eyebrow="The Philosophy"
+            heading="Research | Understand | Connect | Deliver"
             align="left"
           />
 

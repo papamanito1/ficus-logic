@@ -7,7 +7,7 @@ import ContactForm from '@/components/ContactForm'
 export const metadata: Metadata = {
   title: 'Contact | Ficus Logic',
   description:
-    'Get in touch for leadership hiring and niche executive search mandates. We respond within one business day.',
+    'Work with us for leadership hiring and niche executive search mandates. We respond within one business day.',
 }
 
 export default function ContactPage() {
@@ -33,7 +33,7 @@ export default function ContactPage() {
               <AnimatedSection delay={0.15}>
                 <Card variant="premium" className="p-8 lg:p-10">
                   <h3 className="text-xl font-medium text-neutral-900 mb-8">
-                    Get in touch.
+                    Work with Us.
                   </h3>
 
                   <div className="space-y-8">
@@ -42,10 +42,10 @@ export default function ContactPage() {
                         Email
                       </p>
                       <a
-                        href="mailto:contact@ficuslogic.com"
+                        href="mailto:somika@ficuslogic.com"
                         className="text-body font-medium text-neutral-900 hover:text-brand-600 transition-colors"
                       >
-                        contact@ficuslogic.com
+                        somika@ficuslogic.com
                       </a>
                     </div>
 

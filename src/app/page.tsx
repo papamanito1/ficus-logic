@@ -110,16 +110,16 @@ export default function HomePage() {
               variants={heroItem}
               className="text-display-xl text-white max-w-4xl mx-auto"
             >
-              Leadership hiring needs
+              Leadership and Niche hiring
               <br />
-              sharper judgment.
+              requires sharper judgment.
             </motion.h1>
 
             <motion.p
               variants={heroItemFast}
               className="text-lg sm:text-xl text-neutral-400 mt-6 max-w-2xl mx-auto leading-relaxed"
             >
-              Niche search needs real market depth.
+              Market depth | Skills | Industry know-how
             </motion.p>
 
             <motion.div
@@ -221,7 +221,7 @@ export default function HomePage() {
       <section className="section-padding bg-white">
         <div className="container-premium">
           <SectionHeading
-            eyebrow="Industries"
+            eyebrow="Industry"
             heading="Depth across sectors that matter."
           />
 
