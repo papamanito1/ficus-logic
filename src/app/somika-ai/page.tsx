@@ -77,8 +77,8 @@ function StatementSection() {
           transition={{ duration: 0.8, ease, delay: 0.4 }}
           className="text-body-lg text-center max-w-2xl mx-auto mt-8"
         >
-          FELIX — Ficus E Logic Intelligence Exchange augments your search consultants with intelligence.
-          Not a replacement. A force multiplier.
+          Smart talent insights powered by consultants. FELIX — Ficus E Logic Intelligence Exchange
+          augments your search practice with intelligence. Not a replacement. A force multiplier.
         </motion.p>
       </div>
     </section>

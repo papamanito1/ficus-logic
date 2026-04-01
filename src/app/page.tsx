@@ -119,7 +119,7 @@ export default function HomePage() {
               variants={heroItemFast}
               className="text-lg sm:text-xl text-neutral-400 mt-6 max-w-2xl mx-auto leading-relaxed"
             >
-              Market depth | Skills | Industry know-how
+              Market Depth | Skills | Industry know-how
             </motion.p>
 
             <motion.div
@@ -183,25 +183,24 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <AnimatedSection>
               <SectionHeading
-                eyebrow="Niche Practices"
-                heading="High-context roles need specialist search."
+                eyebrow="Niche Mandates"
+                heading="We drive sectoral expertise for impact."
                 align="left"
               />
               <div className="mt-8 space-y-4">
                 <p className="text-body-lg">
-                  Generic search fails for specialist mandates.
+                  Our precision sourcing fills niche skill gaps in record time.
                 </p>
                 <p className="text-body">
-                  Domain depth builds candidate trust.
+                  Struggling with a difficult or narrow skill-set hiring?
                 </p>
                 <p className="text-body">
-                  We cover regulated and technical roles.
+                  Smart talent insights powered by consultants.
                 </p>
-                <p className="text-body">Precision over volume. Always.</p>
               </div>
               <div className="mt-10">
                 <Button href="/niche-hiring" variant="ghost">
-                  Explore Niche Practices
+                  Explore Niche Mandates
                 </Button>
               </div>
             </AnimatedSection>
@@ -305,7 +304,7 @@ export default function HomePage() {
         <div className="container-narrow">
           <SectionHeading
             eyebrow="Global Reach"
-            heading="Search capability across borders."
+            heading="Talent beyond borders."
             subtitle="Mandates don't respect borders. Neither do we."
           />
 
@@ -337,8 +336,8 @@ export default function HomePage() {
       <section className="section-padding bg-neutral-50">
         <div className="container-premium">
           <SectionHeading
-            eyebrow="Join Us"
-            heading="Build your career in executive search."
+            eyebrow="Current Opportunities"
+            heading="Reset your talent priorities with us."
           />
 
           <motion.div
@@ -380,7 +379,9 @@ export default function HomePage() {
         <div className="container-premium">
           <SectionHeading
             eyebrow="Insights"
-            heading="Perspectives on leadership and talent."
+            heading="Perspective on leadership and talent."
+            subtitle="Perspective on Leadership and Niche talent. Our practices on intelligent hiring."
+            className="max-w-4xl"
           />
 
           <motion.div

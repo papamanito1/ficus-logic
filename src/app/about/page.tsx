@@ -7,7 +7,7 @@ import ImageContainer from '@/components/ui/ImageContainer'
 import PageHero from '@/components/PageHero'
 
 export const metadata: Metadata = {
-  title: 'About | Ficus Logic',
+  title: 'About Us | Ficus Logic',
   description:
     'Executive search with depth and discipline. Built for mandates that need conviction.',
 }
@@ -43,7 +43,7 @@ export default function AboutPage() {
       <section className="section-padding bg-white">
         <div className="container-premium">
           <SectionHeading
-            eyebrow="Our Philosophy"
+            eyebrow="Our Approach"
             heading="Precision over volume. Depth over speed."
             align="left"
           />

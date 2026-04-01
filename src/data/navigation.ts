@@ -6,30 +6,30 @@ export interface NavItem {
 }
 
 export const navigation: NavItem[] = [
+  { label: 'About Us', href: '/about' },
   { label: 'Leadership Hiring', href: '/leadership-hiring' },
-  { label: 'Niche Practices', href: '/niche-hiring' },
+  { label: 'Niche Mandates', href: '/niche-hiring' },
   { label: 'Industry', href: '/industries' },
   { label: 'Global Presence', href: '/global-presence' },
   { label: 'Careers', href: '/careers' },
   { label: 'Insights', href: '/insights' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
-  { label: 'FELIX', href: '/somika-ai' },
+  { label: 'Contact Us', href: '/contact' },
+  { label: 'Experience FELIX', href: '/somika-ai' },
 ]
 
 export const footerNavigation = {
   services: [
     { label: 'Leadership Hiring', href: '/leadership-hiring' },
-    { label: 'Niche Practices', href: '/niche-hiring' },
-    { label: 'Industries', href: '/industries' },
-    { label: 'FELIX', href: '/somika-ai' },
+    { label: 'Niche Mandates', href: '/niche-hiring' },
+    { label: 'Industry', href: '/industries' },
+    { label: 'Experience FELIX', href: '/somika-ai' },
   ],
   company: [
-    { label: 'About', href: '/about' },
+    { label: 'About Us', href: '/about' },
     { label: 'Global Presence', href: '/global-presence' },
     { label: 'Careers', href: '/careers' },
     { label: 'Insights', href: '/insights' },
-    { label: 'Contact', href: '/contact' },
+    { label: 'Contact Us', href: '/contact' },
   ],
   legal: [
     { label: 'Privacy Policy', href: '/privacy' },

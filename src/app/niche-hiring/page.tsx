@@ -7,9 +7,9 @@ import ImageContainer from '@/components/ui/ImageContainer'
 import PageHero from '@/components/PageHero'
 
 export const metadata: Metadata = {
-  title: 'Niche Hiring | Ficus Logic',
+  title: 'Niche Mandates | Ficus Logic',
   description:
-    'Specialist search for niche mandates. Deep market mapping for roles with limited talent pools.',
+    'Addressing skill scarcity. Specialist search for difficult and narrow skill-set hiring.',
 }
 
 const challenges = [
@@ -22,7 +22,7 @@ const challenges = [
     description: "Skills alone don\u2019t define the right fit.",
   },
   {
-    title: 'Market Scarcity',
+    title: 'Talent Scarcity',
     description: 'Small pools demand exhaustive mapping.',
   },
 ]
@@ -58,8 +58,8 @@ export default function NicheHiringPage() {
   return (
     <>
       <PageHero
-        heading={"Niche roles can\u2019t be filled with generic search."}
-        subtitle="Specialist mandates need specialist conviction."
+        heading="Addressing Skill Scarcity"
+        subtitle="Struggling with a difficult or narrow skill-set hiring?"
       />
 
       {/* Why Niche is Different */}

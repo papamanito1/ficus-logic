@@ -5,18 +5,15 @@ import PageHero from '@/components/PageHero'
 import ContactForm from '@/components/ContactForm'
 
 export const metadata: Metadata = {
-  title: 'Contact | Ficus Logic',
+  title: 'Contact Us | Ficus Logic',
   description:
-    'Work with us for leadership hiring and niche executive search mandates. We respond within one business day.',
+    'Work with us for leadership hiring and niche executive search mandates.',
 }
 
 export default function ContactPage() {
   return (
     <>
-      <PageHero
-        heading="Let's discuss your mandate."
-        subtitle="We respond within one business day."
-      />
+      <PageHero heading="Happy to help." />
 
       <section className="section-padding bg-white">
         <div className="container-premium">

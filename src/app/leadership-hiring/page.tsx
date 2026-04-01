@@ -40,11 +40,11 @@ const evaluationBlocks = [
     text: 'Leadership style assessed for organizational fit.',
   },
   {
-    title: 'Stakeholder Readiness',
+    title: 'Leadership Evaluation',
     text: 'Candidates prepared for complex decision structures.',
   },
   {
-    title: 'Reference Architecture',
+    title: 'Performance Validation',
     text: 'Structured references that reveal real performance.',
   },
 ]
@@ -135,15 +135,9 @@ export default function LeadershipHiringPage() {
           />
 
           <AnimatedSection className="mt-12 lg:mt-16">
-            <div className="space-y-4 text-center max-w-2xl mx-auto">
-              <p className="text-body-lg">
-                Stakeholder alignment determines mandate success.
-              </p>
-              <p className="text-body">
-                We manage alignment from first conversation onward.
-              </p>
-              <p className="text-body">
-                Expectations stay calibrated. Timelines stay honest.
+            <div className="text-center max-w-2xl mx-auto">
+              <p className="text-body-lg text-neutral-800">
+                Alignment transforms mandates from aspiration into achievement.
               </p>
             </div>
           </AnimatedSection>

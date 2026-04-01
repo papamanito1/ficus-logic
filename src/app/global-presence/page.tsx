@@ -29,7 +29,7 @@ export default function GlobalPresencePage() {
   return (
     <>
       <PageHero
-        heading="Search capability that crosses borders."
+        heading="Talent beyond borders."
         subtitle="Global reach. Local precision."
       />
 

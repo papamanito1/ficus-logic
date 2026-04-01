@@ -8,9 +8,9 @@ import PageHero from '@/components/PageHero'
 import { industries } from '@/data/partners'
 
 export const metadata: Metadata = {
-  title: 'Industries | Ficus Logic',
+  title: 'Industry | Ficus Logic',
   description:
-    'Executive search depth across technology, engineering, BFSI, GCC, product engineering, and industrial sectors.',
+    'We drive sectoral expertise for impact. Leadership challenges transcend sectoral boundaries.',
 }
 
 const industryImages: Record<string, string> = {
@@ -31,8 +31,8 @@ export default function IndustriesPage() {
   return (
     <>
       <PageHero
-        heading="Search depth across sectors that matter."
-        subtitle="Industry context shapes every mandate."
+        heading="We drive sectoral expertise for impact."
+        subtitle="Leadership challenges transcend sectoral boundaries."
       />
 
       {/* Industries Grid */}

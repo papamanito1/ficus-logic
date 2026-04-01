@@ -125,10 +125,10 @@ export default function CareersContent() {
         <div className="container-premium relative z-10">
           <AnimatedSection>
             <p className="text-xs sm:text-sm font-medium uppercase tracking-widest text-brand-400 mb-5">
-              Careers
+              Current Opportunities
             </p>
             <h1 className="text-display-lg text-white max-w-3xl">
-              Build your career in executive search.
+              Reset your talent priorities with us.
             </h1>
             <p className="text-body-lg mt-6 max-w-xl !text-neutral-400">
               Join a team that values precision and depth.

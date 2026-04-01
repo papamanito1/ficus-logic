@@ -120,7 +120,7 @@ export const industries = [
   },
   {
     slug: 'gcc',
-    title: 'GCC / Global Capability Centers',
+    title: 'Global Capability Centre',
     subtitle: 'Building leadership for India GCCs.',
     description: 'Center heads. Function leads. Capability builders.',
   },
