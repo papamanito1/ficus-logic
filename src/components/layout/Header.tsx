@@ -39,33 +39,39 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
     <>
       <header
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-          'bg-white/95 backdrop-blur-md',
-          scrolled && 'shadow-sm shadow-neutral-900/5',
+          'fixed top-0 left-0 right-0 z-50 transition-[box-shadow,background-color,border-color] duration-500 ease-out',
+          'border-b border-neutral-200/50 bg-white/75 backdrop-blur-xl backdrop-saturate-150',
+          scrolled && 'border-neutral-200/70 bg-white/90 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.08)]',
         )}
       >
         <div className="container-premium">
-          <div className="flex items-center justify-between min-h-[156px] py-2">
-            {/* Logo — 3× prior size (h-12 → h-36) */}
-            <Link href="/" className="relative shrink-0">
+          <div className="flex items-center justify-between gap-4 py-3 sm:py-3.5">
+            <Link
+              href="/"
+              className="relative shrink-0 rounded-lg outline-none ring-offset-2 transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-accent-500/40"
+            >
               <Image
                 src="/images/logo.png"
                 alt="Ficus Logic"
-                width={720}
-                height={240}
-                className="h-36 w-auto"
+                width={560}
+                height={186}
+                className="h-[4.5rem] w-auto sm:h-[5.25rem] lg:h-28"
                 priority
               />
             </Link>
 
             {/* Desktop navigation */}
-            <nav className="hidden lg:flex items-center gap-1">
+            <nav className="hidden lg:flex flex-1 items-center justify-end gap-1 pr-2 xl:gap-1.5">
               {navigation.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   {...(item.openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  className="px-3 py-2 text-[13px] font-medium tracking-wide rounded-lg transition-colors duration-300 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                  className={cn(
+                    'whitespace-nowrap rounded-full px-3 py-2 text-[12px] font-medium tracking-[0.02em] text-neutral-500',
+                    'transition-colors duration-200 hover:bg-neutral-100/90 hover:text-neutral-900',
+                    'xl:px-3.5 xl:text-[13px]',
+                  )}
                 >
                   {item.label}
                 </Link>
@@ -73,10 +79,10 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
             </nav>
 
             {/* Desktop CTA */}
-            <div className="hidden lg:block">
+            <div className="hidden lg:block shrink-0 pl-1">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium tracking-wide rounded-full transition-all duration-300 bg-neutral-900 text-white hover:bg-neutral-800 hover:shadow-lg hover:shadow-neutral-900/20"
+                className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-5 py-2.5 text-[13px] font-medium tracking-wide text-white shadow-sm ring-1 ring-neutral-900/5 transition-all duration-300 hover:bg-neutral-800 hover:shadow-md hover:ring-neutral-900/10"
               >
                 Work with Us
               </Link>
@@ -84,8 +90,9 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
 
             {/* Mobile hamburger */}
             <button
+              type="button"
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden relative w-10 h-10 flex items-center justify-center"
+              className="lg:hidden relative flex h-11 w-11 items-center justify-center rounded-xl text-neutral-800 transition-colors hover:bg-neutral-100/90"
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             >
               <div className="flex flex-col gap-[5px]">
@@ -122,30 +129,30 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40 bg-neutral-950/25 backdrop-blur-[2px] lg:hidden"
               onClick={() => setMobileOpen(false)}
             />
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="fixed top-0 right-0 bottom-0 z-40 w-[85vw] max-w-sm bg-white shadow-2xl lg:hidden"
+              transition={{ type: 'spring', stiffness: 320, damping: 34 }}
+              className="fixed top-0 right-0 bottom-0 z-40 w-[min(100vw-3rem,22rem)] max-w-sm border-l border-neutral-200/80 bg-white/95 shadow-[0_0_0_1px_rgba(0,0,0,0.03),-24px_0_48px_-12px_rgba(15,23,42,0.12)] backdrop-blur-xl lg:hidden"
             >
-              <div className="flex flex-col h-full pt-44 pb-8 px-8">
-                <nav className="flex flex-col gap-1">
+              <div className="flex h-full flex-col px-6 pb-8 pt-[6.75rem] sm:pt-[7.5rem]">
+                <nav className="flex flex-col gap-0.5">
                   {navigation.map((item, i) => (
                     <motion.div
                       key={item.href}
-                      initial={{ opacity: 0, x: 20 }}
+                      initial={{ opacity: 0, x: 12 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.05 * i, duration: 0.3 }}
+                      transition={{ delay: 0.04 * i, duration: 0.28 }}
                     >
                       <Link
                         href={item.href}
                         {...(item.openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                         onClick={() => setMobileOpen(false)}
-                        className="block py-3 text-[15px] font-medium text-neutral-700 hover:text-neutral-900 transition-colors border-b border-neutral-100"
+                        className="block rounded-xl py-3.5 pl-1 text-[15px] font-medium tracking-[0.01em] text-neutral-700 transition-colors hover:bg-neutral-50 hover:text-neutral-900"
                       >
                         {item.label}
                       </Link>
@@ -153,11 +160,11 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
                   ))}
                 </nav>
 
-                <div className="mt-auto">
+                <div className="mt-auto border-t border-neutral-100 pt-6">
                   <Link
                     href="/contact"
                     onClick={() => setMobileOpen(false)}
-                    className="btn-primary w-full text-center"
+                    className="btn-primary flex w-full items-center justify-center rounded-full py-3.5 text-[14px] font-medium shadow-sm"
                   >
                     Work with Us
                   </Link>
