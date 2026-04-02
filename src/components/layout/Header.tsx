@@ -40,8 +40,8 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
       <header
         className={cn(
           'fixed top-0 left-0 right-0 z-50 transition-[box-shadow,background-color,border-color] duration-500 ease-out',
-          'border-b border-neutral-200/50 bg-white/75 backdrop-blur-xl backdrop-saturate-150',
-          scrolled && 'border-neutral-200/70 bg-white/90 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.08)]',
+          'border-b border-neutral-200/50 bg-white',
+          scrolled && 'border-neutral-200/70 bg-white shadow-[0_8px_30px_-12px_rgba(15,23,42,0.08)]',
         )}
       >
         <div className="container-premium">
@@ -137,7 +137,7 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', stiffness: 320, damping: 34 }}
-              className="fixed top-0 right-0 bottom-0 z-40 w-[min(100vw-3rem,22rem)] max-w-sm border-l border-neutral-200/80 bg-white/95 shadow-[0_0_0_1px_rgba(0,0,0,0.03),-24px_0_48px_-12px_rgba(15,23,42,0.12)] backdrop-blur-xl lg:hidden"
+              className="fixed top-0 right-0 bottom-0 z-40 w-[min(100vw-3rem,22rem)] max-w-sm border-l border-neutral-200/80 bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.03),-24px_0_48px_-12px_rgba(15,23,42,0.12)] lg:hidden"
             >
               <div className="flex h-full flex-col px-6 pb-8 pt-[6.75rem] sm:pt-[7.5rem]">
                 <nav className="flex flex-col gap-0.5">
