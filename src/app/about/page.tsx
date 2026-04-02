@@ -9,7 +9,7 @@ import PageHero from '@/components/PageHero'
 export const metadata: Metadata = {
   title: 'About Us | Ficus Logic',
   description:
-    'Executive search with depth and discipline. Built for mandates that need conviction.',
+    'Executive search with depth and discipline. Engineered for commitments that demand certainty.',
 }
 
 const principles = [
@@ -35,7 +35,7 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        heading="Built for mandates that need conviction."
+        heading="Engineered for commitments that demand certainty."
         subtitle="Executive search with depth and discipline."
       />
 
@@ -44,7 +44,7 @@ export default function AboutPage() {
         <div className="container-premium">
           <SectionHeading
             eyebrow="Our Approach"
-            heading="Precision over volume. Depth over speed."
+            heading="Precision over Volume. Depth over Speed."
             align="left"
           />
 
@@ -102,7 +102,7 @@ export default function AboutPage() {
         <div className="container-premium">
           <SectionHeading
             eyebrow="Search Discipline"
-            heading="Every mandate is treated as unique."
+            heading="Customized Approach to every mandate."
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-16 lg:mt-20">
@@ -125,7 +125,7 @@ export default function AboutPage() {
         <div className="container-narrow">
           <SectionHeading
             eyebrow="Leadership Fit"
-            heading="We assess for context, not just credentials."
+            heading="We assess for context, skills and performance credentials."
           />
 
           <AnimatedSection className="mt-12 lg:mt-16">
@@ -151,7 +151,9 @@ export default function AboutPage() {
         <div className="container-narrow">
           <SectionHeading
             eyebrow="Global Execution"
-            heading="Local depth. Cross-border capability."
+            heading="Local Depth and Global Capabilities."
+            subtitle="Mandates span across geographies and industries."
+            className="max-w-4xl"
           />
 
           <AnimatedSection className="mt-12 lg:mt-16">
@@ -177,7 +179,7 @@ export default function AboutPage() {
         <div className="container-narrow">
           <SectionHeading
             eyebrow="Our Team"
-            heading="Search professionals. Not recruiters."
+            heading="Your partner in talent quest."
           />
 
           <AnimatedSection className="mt-12 lg:mt-16">
@@ -202,7 +204,7 @@ export default function AboutPage() {
         <div className="container-narrow text-center">
           <AnimatedSection>
             <h2 className="text-display-md text-white max-w-3xl mx-auto">
-              Ready to work with a search partner who understands?
+              Solve your hiring challenge right here.
             </h2>
             <div className="mt-10">
               <Button

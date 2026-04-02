@@ -112,7 +112,7 @@ export default function HomePage() {
             >
               Leadership and Niche hiring
               <br />
-              requires sharper judgment.
+              require sharper judgment.
             </motion.h1>
 
             <motion.p
