@@ -9,7 +9,7 @@ import PageHero from '@/components/PageHero'
 export const metadata: Metadata = {
   title: 'About Us | Ficus Logic',
   description:
-    'Executive search with depth and discipline. Engineered for commitments that demand certainty.',
+    'Executive search with depth and discipline. Engineered for commitment, built on certainty.',
 }
 
 const principles = [
@@ -35,7 +35,7 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        heading="Engineered for commitments that demand certainty."
+        heading="Engineered for commitment, built on certainty."
         subtitle="Executive search with depth and discipline."
       />
 
