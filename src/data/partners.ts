@@ -70,32 +70,50 @@ export const globalRegions: GlobalRegion[] = [
   {
     name: 'South Asia',
     countries: ['India'],
-    description: 'Headquarters and primary delivery hub. Deep market presence across all major cities.',
+    description:
+      'Headquarters and primary delivery hub. Deep market presence across major cities and sectors.',
+  },
+  {
+    name: 'Far East',
+    countries: ['Korea', 'Japan', 'HK'],
+    description:
+      'Leadership and niche search coverage across major North Asia commercial hubs.',
   },
   {
     name: 'Middle East',
-    countries: ['UAE', 'Saudi Arabia', 'Qatar'],
-    description: 'Growing presence serving GCC region mandates across technology and financial services.',
+    countries: ['Oman', 'Dubai', 'Qatar', 'UAE'],
+    description:
+      'Mandates across the Gulf corridor, from Oman and the UAE to Qatar.',
   },
   {
-    name: 'Southeast Asia',
-    countries: ['Singapore', 'Malaysia', 'Indonesia', 'Vietnam'],
-    description: 'APAC hub for cross-border search and regional leadership mandates.',
+    name: 'Africa',
+    countries: [
+      'Egypt',
+      'Nigeria',
+      'Gabon',
+      'Ivory Coast',
+      'Ghana',
+      'Kenya',
+      'South Africa',
+      'Uganda',
+      'Tanzania',
+    ],
+    description:
+      'Reach across North, West, East, and Southern Africa for regional and cross-border roles.',
   },
   {
-    name: 'Europe',
-    countries: ['United Kingdom', 'Germany'],
-    description: 'Partner-led coverage for European mandates with joint delivery models.',
-  },
-  {
-    name: 'North America',
-    countries: ['United States', 'Canada'],
-    description: 'Strategic partnerships for North American leadership and specialist hiring.',
-  },
-  {
-    name: 'East Asia',
-    countries: ['Japan'],
-    description: 'Partner network coverage for Japan-origin and East Asian mandates.',
+    name: 'APAC & ANZ',
+    countries: [
+      'Singapore',
+      'Vietnam',
+      'Thailand',
+      'Malaysia',
+      'Philippines',
+      'China',
+      'Taiwan',
+    ],
+    description:
+      'Southeast Asia, Greater China, and connected APAC markets for regional leadership mandates.',
   },
 ]
 

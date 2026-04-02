@@ -9,7 +9,7 @@ import { partnerCompanies, globalRegions } from '@/data/partners'
 export const metadata: Metadata = {
   title: 'Global Presence | Ficus Logic',
   description:
-    'Executive search capability across 6+ countries and 3 continents. Local depth with cross-border coordination.',
+    'Executive search from India across the Far East, Middle East, Africa, and APAC & ANZ. Local depth with cross-border coordination.',
 }
 
 const typeBadgeColors: Record<string, string> = {
@@ -20,8 +20,8 @@ const typeBadgeColors: Record<string, string> = {
 }
 
 const stats = [
-  { label: 'Countries', value: '6+' },
-  { label: 'Continents', value: '3' },
+  { label: 'Markets', value: '20+' },
+  { label: 'Regions', value: '5' },
   { label: 'Partner Network', value: '25+' },
 ]
 
