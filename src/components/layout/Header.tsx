@@ -55,7 +55,7 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
                 alt="Ficus Logic"
                 width={560}
                 height={186}
-                className="h-[4.5rem] w-auto sm:h-[5.25rem] lg:h-28"
+                className="h-20 w-auto sm:h-24 lg:h-32"
                 priority
               />
             </Link>
@@ -139,7 +139,7 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
               transition={{ type: 'spring', stiffness: 320, damping: 34 }}
               className="fixed top-0 right-0 bottom-0 z-40 w-[min(100vw-3rem,22rem)] max-w-sm border-l border-neutral-200/80 bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.03),-24px_0_48px_-12px_rgba(15,23,42,0.12)] lg:hidden"
             >
-              <div className="flex h-full flex-col px-6 pb-8 pt-[6.75rem] sm:pt-[7.5rem]">
+              <div className="flex h-full flex-col px-6 pb-8 pt-28 sm:pt-32">
                 <nav className="flex flex-col gap-0.5">
                   {navigation.map((item, i) => (
                     <motion.div
