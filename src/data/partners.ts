@@ -125,6 +125,13 @@ export const industries = [
     description: 'Engineering leaders. Product minds. Platform architects.',
   },
   {
+    slug: 'ai-robotics',
+    title: 'AI & Robotics',
+    subtitle: 'Intelligent systems, automation, and applied research leadership.',
+    description:
+      'ML and AI leaders. Robotics and autonomy teams. Research-to-production operators.',
+  },
+  {
     slug: 'engineering',
     title: 'Engineering & EPC',
     subtitle: 'Complex project and technical leadership.',

@@ -16,6 +16,8 @@ export const metadata: Metadata = {
 const industryImages: Record<string, string> = {
   technology:
     'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=500&fit=crop',
+  'ai-robotics':
+    'https://images.unsplash.com/photo-1485827404703-a6f9e9c2d1e6?w=800&h=500&fit=crop',
   engineering:
     'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&h=500&fit=crop',
   'bfsi-fintech':
