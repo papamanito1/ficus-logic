@@ -24,6 +24,12 @@ export interface HireboundCareerOpening {
   postedDate: string
   summary: string
   externalUrl: string
+  experience?: string
+  applyEmail?: string
+  industry?: string
+  note?: string
+  hiringFor?: string
+  tags?: string[]
 }
 
 function getJobUrlTemplate(): string {

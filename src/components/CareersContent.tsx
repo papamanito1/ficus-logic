@@ -276,17 +276,12 @@ export default function CareersContent({ openings }: { openings: HireboundCareer
         <div className="container-premium">
           {openings.length === 0 ? (
             <AnimatedSection className="text-center py-16 sm:py-24 max-w-lg mx-auto">
-              <h3 className="text-display-sm text-neutral-900 mb-3">Openings are loading from Hirebound</h3>
+              <h3 className="text-display-sm text-neutral-900 mb-3">No open positions right now</h3>
               <p className="text-body mb-6">
-                If none appear here, add{' '}
-                <code className="text-sm bg-neutral-200/80 px-1.5 py-0.5 rounded">HIREBOUND_BEARER_TOKEN</code> (and
-                optional <code className="text-sm bg-neutral-200/80 px-1.5 py-0.5 rounded">HIREBOUND_OPENINGS_PATH</code>
-                ) in your server environment, or set{' '}
-                <code className="text-sm bg-neutral-200/80 px-1.5 py-0.5 rounded">HIREBOUND_OPENINGS_JSON_URL</code>{' '}
-                to a JSON feed.
+                We&rsquo;re always looking for exceptional talent. Check back soon or get in touch directly.
               </p>
-              <Button href={listingsUrl} variant="primary">
-                View openings on Hirebound
+              <Button href="/contact" variant="primary">
+                Get in Touch
               </Button>
             </AnimatedSection>
           ) : filteredJobs.length > 0 ? (

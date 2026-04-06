@@ -38,6 +38,12 @@ const emptyRoleForm = () => ({
   employmentType: 'Full-time',
   postedDate: new Date().toISOString().slice(0, 10),
   summary: '',
+  experience: '',
+  applyEmail: '',
+  industry: '',
+  note: '',
+  hiringFor: '',
+  tags: '',
 })
 
 export default function MemberDashboard() {
@@ -213,6 +219,12 @@ export default function MemberDashboard() {
       postedDate: roleForm.postedDate.trim(),
       summary: roleForm.summary.trim(),
       externalUrl: url || 'https://careerpage.hirebound.io/org/ficuslogic',
+      experience: roleForm.experience.trim() || undefined,
+      applyEmail: roleForm.applyEmail.trim() || undefined,
+      industry: roleForm.industry.trim() || undefined,
+      note: roleForm.note.trim() || undefined,
+      hiringFor: roleForm.hiringFor.trim() || undefined,
+      tags: roleForm.tags.trim() ? roleForm.tags.split(',').map((t) => t.trim()).filter(Boolean) : undefined,
     }
     const ok = await postJson('/api/members/careers', { action: 'upsertManual', role })
     if (ok) { setRoleForm(emptyRoleForm()); await loadCareers() }
@@ -550,6 +562,68 @@ export default function MemberDashboard() {
                         placeholder="Brief description of the role shown on the careers page…"
                         value={roleForm.summary}
                         onChange={(e) => setRoleForm((f) => ({ ...f, summary: e.target.value }))}
+                      />
+                    </label>
+                    <label className="text-sm">
+                      <span className="text-neutral-600 block mb-1">
+                        Hiring for
+                        <span className="text-neutral-400 ml-1">(e.g. &ldquo;on behalf of a leading IT/Engineering Consulting organization&rdquo;)</span>
+                      </span>
+                      <input
+                        className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                        placeholder="Ficus e Logic Pvt. Ltd. is hiring on behalf of…"
+                        value={roleForm.hiringFor}
+                        onChange={(e) => setRoleForm((f) => ({ ...f, hiringFor: e.target.value }))}
+                      />
+                    </label>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <label className="text-sm">
+                        <span className="text-neutral-600 block mb-1">Experience required</span>
+                        <input
+                          className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                          placeholder="e.g. 5+ Years"
+                          value={roleForm.experience}
+                          onChange={(e) => setRoleForm((f) => ({ ...f, experience: e.target.value }))}
+                        />
+                      </label>
+                      <label className="text-sm">
+                        <span className="text-neutral-600 block mb-1">Industry</span>
+                        <input
+                          className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                          placeholder="e.g. IT/Engineering Consulting"
+                          value={roleForm.industry}
+                          onChange={(e) => setRoleForm((f) => ({ ...f, industry: e.target.value }))}
+                        />
+                      </label>
+                    </div>
+                    <label className="text-sm">
+                      <span className="text-neutral-600 block mb-1">Apply email</span>
+                      <input
+                        type="email"
+                        className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                        placeholder="e.g. pathak.ap@ficuslogic.com"
+                        value={roleForm.applyEmail}
+                        onChange={(e) => setRoleForm((f) => ({ ...f, applyEmail: e.target.value }))}
+                      />
+                    </label>
+                    <label className="text-sm">
+                      <span className="text-neutral-600 block mb-1">
+                        Note <span className="text-neutral-400">(shown as a warning on the role page)</span>
+                      </span>
+                      <input
+                        className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                        placeholder="e.g. Strong experience in presales and RFP/RFQ lifecycle is mandatory"
+                        value={roleForm.note}
+                        onChange={(e) => setRoleForm((f) => ({ ...f, note: e.target.value }))}
+                      />
+                    </label>
+                    <label className="text-sm">
+                      <span className="text-neutral-600 block mb-1">Tags (comma-separated hashtags)</span>
+                      <input
+                        className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                        placeholder="e.g. Hiring, Presales, Mobility, Bangalore"
+                        value={roleForm.tags}
+                        onChange={(e) => setRoleForm((f) => ({ ...f, tags: e.target.value }))}
                       />
                     </label>
                   </div>
