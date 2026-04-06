@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import CareersContent from '@/components/CareersContent'
 import { fetchHireboundCareerOpenings } from '@/lib/hirebound-careers'
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Careers | Ficus Logic',

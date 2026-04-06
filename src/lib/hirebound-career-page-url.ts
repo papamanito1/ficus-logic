@@ -102,12 +102,12 @@ export async function buildOpeningFromCareerPageUrl(
   const today = new Date().toISOString().slice(0, 10)
   return {
     id: positionId,
-    title: 'Open role — view details on Hirebound',
-    location: 'See listing',
+    title: 'Open position — click to view & apply',
+    location: 'View on Hirebound',
     department: FICUS_CAREERS_DEPARTMENT,
     employmentType: 'Full-time',
     postedDate: today,
-    summary: `${BRAND_SUMMARY_PREFIX}We could not load the job title automatically. Open the Hirebound career page to see the full description and apply. If you use Hirebound API access, set HIREBOUND_BEARER_TOKEN so titles sync automatically.`,
+    summary: `${BRAND_SUMMARY_PREFIX}Click the link to view the full job description and apply via our Hirebound careers page.`,
     externalUrl: canonicalUrl,
   }
 }
