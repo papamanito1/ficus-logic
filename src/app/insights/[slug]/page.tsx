@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getPublishedPosts, getPostBySlug } from '@/data/insights'
+import {
+  getMergedPostBySlug,
+  getMergedPublishedPosts,
+} from '@/lib/insights-merge'
 import { formatDate } from '@/lib/utils'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import Card from '@/components/ui/Card'
@@ -12,13 +15,16 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
+export const revalidate = 60
+
 export async function generateStaticParams() {
-  return getPublishedPosts().map((post) => ({ slug: post.slug }))
+  const posts = await getMergedPublishedPosts()
+  return posts.map((post) => ({ slug: post.slug }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getMergedPostBySlug(slug)
   if (!post) return { title: 'Not Found | Ficus Logic' }
 
   return {
@@ -91,10 +97,10 @@ function renderContent(content: string) {
 
 export default async function InsightArticlePage({ params }: PageProps) {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getMergedPostBySlug(slug)
   if (!post) notFound()
 
-  const allPosts = getPublishedPosts()
+  const allPosts = await getMergedPublishedPosts()
   const related = allPosts
     .filter((p) => p.slug !== post.slug)
     .slice(0, 3)

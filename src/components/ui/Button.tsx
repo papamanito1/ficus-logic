@@ -12,6 +12,7 @@ interface ButtonProps {
   className?: string
   onClick?: () => void
   type?: 'button' | 'submit'
+  disabled?: boolean
 }
 
 const sizeClasses = {
@@ -57,27 +58,37 @@ export default function Button({
   className,
   onClick,
   type = 'button',
+  disabled = false,
 }: ButtonProps) {
   const classes = cn(
     variantClasses[variant],
     variant !== 'ghost' && sizeClasses[size],
     'group',
+    disabled && 'opacity-40 pointer-events-none cursor-not-allowed',
     className,
   )
 
   const motionProps = {
-    whileHover: variant === 'ghost' ? {} : { scale: 1.02, y: -1 },
-    whileTap: variant === 'ghost' ? {} : { scale: 0.98 },
+    whileHover: variant === 'ghost' || disabled ? {} : { scale: 1.02, y: -1 },
+    whileTap: variant === 'ghost' || disabled ? {} : { scale: 0.98 },
     transition: { type: 'spring' as const, stiffness: 400, damping: 25 },
   }
 
   if (href) {
+    const external = /^https?:\/\//i.test(href)
     return (
       <motion.div {...motionProps} className="inline-block">
-        <Link href={href} className={classes}>
-          {children}
-          {variant === 'ghost' && <ArrowIcon />}
-        </Link>
+        {external ? (
+          <a href={href} target="_blank" rel="noopener noreferrer" className={classes}>
+            {children}
+            {variant === 'ghost' && <ArrowIcon />}
+          </a>
+        ) : (
+          <Link href={href} className={classes}>
+            {children}
+            {variant === 'ghost' && <ArrowIcon />}
+          </Link>
+        )}
       </motion.div>
     )
   }
@@ -87,6 +98,7 @@ export default function Button({
       {...motionProps}
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={classes}
     >
       {children}

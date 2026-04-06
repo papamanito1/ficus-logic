@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import Button from '@/components/ui/Button'
 import SectionHeading from '@/components/ui/SectionHeading'
@@ -7,13 +8,10 @@ import Card from '@/components/ui/Card'
 import ImageContainer from '@/components/ui/ImageContainer'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import { industries } from '@/data/partners'
-import { getActiveJobs } from '@/data/careers'
-import { getFeaturedPosts } from '@/data/insights'
+import type { BlogPost } from '@/data/insights'
+import type { HireboundCareerOpening } from '@/lib/hirebound-careers'
 import { staggerContainer, fadeUp, viewportConfig } from '@/lib/motion'
 import { formatDate } from '@/lib/utils'
-
-const jobs = getActiveJobs().slice(0, 3)
-const featuredPosts = getFeaturedPosts().slice(0, 2)
 
 const values = [
   {
@@ -98,6 +96,42 @@ const heroItemFast = {
 }
 
 export default function HomePage() {
+  const [careerPreview, setCareerPreview] = useState<HireboundCareerOpening[]>([])
+  const [featuredPosts, setFeaturedPosts] = useState<BlogPost[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/careers/openings')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: HireboundCareerOpening[]) => {
+        if (!cancelled && Array.isArray(data)) setCareerPreview(data.slice(0, 3))
+      })
+      .catch(() => {
+        if (!cancelled) setCareerPreview([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/insights/feed')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: BlogPost[]) => {
+        if (!cancelled && Array.isArray(data)) {
+          const featured = data.filter((p) => p.featured).slice(0, 2)
+          setFeaturedPosts(featured)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setFeaturedPosts([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   return (
     <>
       {/* ── Hero ── */}
@@ -347,23 +381,29 @@ export default function HomePage() {
             viewport={viewportConfig}
             className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 lg:mt-20"
           >
-            {jobs.map((job) => (
-              <motion.div key={job.slug} variants={fadeUp}>
-                <Card
-                  variant="premium"
-                  href={`/careers/${job.slug}`}
-                  className="p-8"
-                >
-                  <p className="text-xs font-medium uppercase tracking-widest text-accent-500 mb-3">
-                    {job.department}
+            {careerPreview.length > 0 ? (
+              careerPreview.map((job) => (
+                <motion.div key={job.id} variants={fadeUp}>
+                  <Card variant="premium" href={job.externalUrl} className="p-8">
+                    <p className="text-xs font-medium uppercase tracking-widest text-accent-500 mb-3">
+                      {job.department}
+                    </p>
+                    <h3 className="text-lg font-medium text-neutral-900 mb-4">
+                      {job.title}
+                    </h3>
+                    <p className="text-body-sm">{job.location}</p>
+                  </Card>
+                </motion.div>
+              ))
+            ) : (
+              <motion.div variants={fadeUp} className="md:col-span-3">
+                <Card variant="premium" href="/careers" className="p-8 text-center">
+                  <p className="text-body-lg text-neutral-600">
+                    Explore active roles on our careers page — listings sync from Hirebound when configured.
                   </p>
-                  <h3 className="text-lg font-medium text-neutral-900 mb-4">
-                    {job.title}
-                  </h3>
-                  <p className="text-body-sm">{job.location}</p>
                 </Card>
               </motion.div>
-            ))}
+            )}
           </motion.div>
 
           <AnimatedSection className="text-center mt-12">
@@ -391,37 +431,47 @@ export default function HomePage() {
             viewport={viewportConfig}
             className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 lg:mt-20"
           >
-            {featuredPosts.map((post) => (
-              <motion.div key={post.slug} variants={fadeUp}>
-                <Card
-                  variant="premium"
-                  href={`/insights/${post.slug}`}
-                  className="overflow-hidden"
-                >
-                  <ImageContainer
-                    src={post.imageUrl}
-                    alt={post.title}
-                    aspectRatio="16/9"
-                    className="!rounded-none"
-                  />
-                  <div className="p-8">
-                    <div className="flex items-center gap-3 text-xs text-neutral-500 mb-4">
-                      <span className="font-medium uppercase tracking-widest text-accent-500">
-                        {post.category}
-                      </span>
-                      <span className="w-px h-3 bg-neutral-300" />
-                      <span>{formatDate(post.publishedDate)}</span>
-                      <span className="w-px h-3 bg-neutral-300" />
-                      <span>{post.readTime}</span>
+            {featuredPosts.length > 0 ? (
+              featuredPosts.map((post) => (
+                <motion.div key={post.slug} variants={fadeUp}>
+                  <Card
+                    variant="premium"
+                    href={`/insights/${post.slug}`}
+                    className="overflow-hidden"
+                  >
+                    <ImageContainer
+                      src={post.imageUrl}
+                      alt={post.title}
+                      aspectRatio="16/9"
+                      className="!rounded-none"
+                    />
+                    <div className="p-8">
+                      <div className="flex items-center gap-3 text-xs text-neutral-500 mb-4">
+                        <span className="font-medium uppercase tracking-widest text-accent-500">
+                          {post.category}
+                        </span>
+                        <span className="w-px h-3 bg-neutral-300" />
+                        <span>{formatDate(post.publishedDate)}</span>
+                        <span className="w-px h-3 bg-neutral-300" />
+                        <span>{post.readTime}</span>
+                      </div>
+                      <h3 className="text-xl font-medium text-neutral-900 mb-3 leading-snug">
+                        {post.title}
+                      </h3>
+                      <p className="text-body-sm line-clamp-2">{post.excerpt}</p>
                     </div>
-                    <h3 className="text-xl font-medium text-neutral-900 mb-3 leading-snug">
-                      {post.title}
-                    </h3>
-                    <p className="text-body-sm line-clamp-2">{post.excerpt}</p>
-                  </div>
+                  </Card>
+                </motion.div>
+              ))
+            ) : (
+              <motion.div variants={fadeUp} className="md:col-span-2">
+                <Card variant="premium" href="/insights" className="p-8 text-center">
+                  <p className="text-body-lg text-neutral-600">
+                    Read the latest on leadership hiring and niche talent — visit Insights.
+                  </p>
                 </Card>
               </motion.div>
-            ))}
+            )}
           </motion.div>
 
           <AnimatedSection className="text-center mt-12">

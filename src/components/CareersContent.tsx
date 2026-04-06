@@ -1,14 +1,12 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import {
-  searchJobs,
-  getUniqueLocations,
-  getUniqueDepartments,
-} from '@/data/careers'
+  hireboundListingsPublicUrl,
+  type HireboundCareerOpening,
+} from '@/lib/hirebound-careers'
 import { formatDate, truncate } from '@/lib/utils'
 import { staggerContainer, fadeUp, viewportConfig } from '@/lib/motion'
 import AnimatedSection from '@/components/ui/AnimatedSection'
@@ -89,24 +87,55 @@ function XIcon({ className }: { className?: string }) {
   )
 }
 
-export default function CareersContent() {
+function filterOpenings(
+  openings: HireboundCareerOpening[],
+  query: string,
+  locationFilter: string,
+  departmentFilter: string,
+): HireboundCareerOpening[] {
+  let results = openings
+  if (query) {
+    const q = query.toLowerCase()
+    results = results.filter(
+      (job) =>
+        job.title.toLowerCase().includes(q) ||
+        job.location.toLowerCase().includes(q) ||
+        job.department.toLowerCase().includes(q) ||
+        job.summary.toLowerCase().includes(q),
+    )
+  }
+  if (locationFilter) {
+    results = results.filter((j) => j.location.includes(locationFilter))
+  }
+  if (departmentFilter) {
+    results = results.filter((j) => j.department === departmentFilter)
+  }
+  return results
+}
+
+function uniqueLocations(openings: HireboundCareerOpening[]): string[] {
+  return [...new Set(openings.map((j) => j.location))].sort()
+}
+
+function uniqueDepartments(openings: HireboundCareerOpening[]): string[] {
+  return [...new Set(openings.map((j) => j.department))].sort()
+}
+
+export default function CareersContent({ openings }: { openings: HireboundCareerOpening[] }) {
   const [query, setQuery] = useState('')
   const [locationFilter, setLocationFilter] = useState('')
   const [departmentFilter, setDepartmentFilter] = useState('')
 
-  const locations = useMemo(() => getUniqueLocations(), [])
-  const departments = useMemo(() => getUniqueDepartments(), [])
+  const locations = useMemo(() => uniqueLocations(openings), [openings])
+  const departments = useMemo(() => uniqueDepartments(openings), [openings])
 
   const filteredJobs = useMemo(
-    () =>
-      searchJobs(query, {
-        location: locationFilter,
-        department: departmentFilter,
-      }),
-    [query, locationFilter, departmentFilter],
+    () => filterOpenings(openings, query, locationFilter, departmentFilter),
+    [openings, query, locationFilter, departmentFilter],
   )
 
   const hasActiveFilters = query || locationFilter || departmentFilter
+  const listingsUrl = hireboundListingsPublicUrl()
 
   function clearAllFilters() {
     setQuery('')
@@ -119,7 +148,6 @@ export default function CareersContent() {
 
   return (
     <>
-      {/* Hero */}
       <section className="relative bg-gradient-to-br from-accent-900 via-accent-800 to-accent-700 pt-36 pb-20 sm:pt-44 sm:pb-28 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--color-brand-400)_0%,_transparent_50%)] opacity-20" />
         <div className="container-premium relative z-10">
@@ -137,11 +165,9 @@ export default function CareersContent() {
         </div>
       </section>
 
-      {/* Search & Filter Bar */}
       <section className="bg-white border-b border-neutral-200/60 sticky top-0 z-30">
         <div className="container-premium py-5">
           <div className="flex flex-col lg:flex-row gap-4">
-            {/* Search Input */}
             <div className="relative flex-1">
               <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
               <input
@@ -156,7 +182,6 @@ export default function CareersContent() {
               />
             </div>
 
-            {/* Location Filter */}
             <div className="relative">
               <select
                 value={locationFilter}
@@ -176,7 +201,6 @@ export default function CareersContent() {
               <ChevronDownIcon className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" />
             </div>
 
-            {/* Department Filter */}
             <div className="relative">
               <select
                 value={departmentFilter}
@@ -197,11 +221,11 @@ export default function CareersContent() {
             </div>
           </div>
 
-          {/* Active Filter Pills */}
           {hasActiveFilters && (
             <div className="flex flex-wrap items-center gap-2 mt-4">
               {query && (
                 <button
+                  type="button"
                   onClick={() => setQuery('')}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium
                              bg-brand-50 text-brand-700 rounded-full
@@ -213,6 +237,7 @@ export default function CareersContent() {
               )}
               {locationFilter && (
                 <button
+                  type="button"
                   onClick={() => setLocationFilter('')}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium
                              bg-accent-50 text-accent-700 rounded-full
@@ -224,6 +249,7 @@ export default function CareersContent() {
               )}
               {departmentFilter && (
                 <button
+                  type="button"
                   onClick={() => setDepartmentFilter('')}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium
                              bg-accent-50 text-accent-700 rounded-full
@@ -234,6 +260,7 @@ export default function CareersContent() {
                 </button>
               )}
               <button
+                type="button"
                 onClick={clearAllFilters}
                 className="text-xs font-medium text-neutral-500 hover:text-neutral-900
                            transition-colors duration-200 ml-1"
@@ -245,17 +272,29 @@ export default function CareersContent() {
         </div>
       </section>
 
-      {/* Results */}
       <section className="section-padding bg-neutral-50">
         <div className="container-premium">
-          {filteredJobs.length > 0 ? (
+          {openings.length === 0 ? (
+            <AnimatedSection className="text-center py-16 sm:py-24 max-w-lg mx-auto">
+              <h3 className="text-display-sm text-neutral-900 mb-3">Openings are loading from Hirebound</h3>
+              <p className="text-body mb-6">
+                If none appear here, add{' '}
+                <code className="text-sm bg-neutral-200/80 px-1.5 py-0.5 rounded">HIREBOUND_BEARER_TOKEN</code> (and
+                optional <code className="text-sm bg-neutral-200/80 px-1.5 py-0.5 rounded">HIREBOUND_OPENINGS_PATH</code>
+                ) in your server environment, or set{' '}
+                <code className="text-sm bg-neutral-200/80 px-1.5 py-0.5 rounded">HIREBOUND_OPENINGS_JSON_URL</code>{' '}
+                to a JSON feed.
+              </p>
+              <Button href={listingsUrl} variant="primary">
+                View openings on Hirebound
+              </Button>
+            </AnimatedSection>
+          ) : filteredJobs.length > 0 ? (
             <>
               <AnimatedSection>
                 <p className="text-body-sm mb-10">
                   Showing{' '}
-                  <span className="text-neutral-900 font-medium">
-                    {filteredJobs.length}
-                  </span>{' '}
+                  <span className="text-neutral-900 font-medium">{filteredJobs.length}</span>{' '}
                   {filteredJobs.length === 1 ? 'role' : 'roles'}
                 </p>
               </AnimatedSection>
@@ -268,9 +307,11 @@ export default function CareersContent() {
                 className="grid grid-cols-1 lg:grid-cols-2 gap-6"
               >
                 {filteredJobs.map((job) => (
-                  <motion.div key={job.slug} variants={fadeUp}>
-                    <Link
-                      href={`/careers/${job.slug}`}
+                  <motion.div key={job.id} variants={fadeUp}>
+                    <a
+                      href={job.externalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="card-premium block p-8 lg:p-10 group hover:-translate-y-1 transition-transform duration-500"
                     >
                       <div className="flex items-start justify-between gap-4 mb-4">
@@ -294,17 +335,18 @@ export default function CareersContent() {
                       </div>
 
                       <p className="text-body-sm leading-relaxed mb-6">
-                        {truncate(job.overview, 120)}
+                        {job.summary ? truncate(job.summary, 120) : 'View full description and apply on Hirebound.'}
                       </p>
 
                       <span className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 group-hover:gap-2.5 transition-all duration-300">
-                        View Role
+                        View on Hirebound
                         <svg
                           width="16"
                           height="16"
                           viewBox="0 0 16 16"
                           fill="none"
                           className="transition-transform duration-300 group-hover:translate-x-1"
+                          aria-hidden
                         >
                           <path
                             d="M3.333 8h9.334M8.667 4l4 4-4 4"
@@ -315,24 +357,19 @@ export default function CareersContent() {
                           />
                         </svg>
                       </span>
-                    </Link>
+                    </a>
                   </motion.div>
                 ))}
               </motion.div>
             </>
           ) : (
-            /* Empty State */
             <AnimatedSection className="text-center py-16 sm:py-24">
               <div className="max-w-md mx-auto">
                 <div className="w-16 h-16 rounded-2xl bg-neutral-200/60 mx-auto mb-6 flex items-center justify-center">
                   <SearchIcon className="text-neutral-400 w-7 h-7" />
                 </div>
-                <h3 className="text-display-sm text-neutral-900 mb-3">
-                  No roles match your search.
-                </h3>
-                <p className="text-body mb-8">
-                  Try adjusting your filters or search terms.
-                </p>
+                <h3 className="text-display-sm text-neutral-900 mb-3">No roles match your search.</h3>
+                <p className="text-body mb-8">Try adjusting your filters or search terms.</p>
                 <Button variant="secondary" onClick={clearAllFilters}>
                   Clear All Filters
                 </Button>
@@ -342,23 +379,27 @@ export default function CareersContent() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="section-padding bg-gradient-to-r from-accent-800 to-accent-700">
         <div className="container-narrow text-center">
           <AnimatedSection>
-            <h2 className="text-display-md text-white">
-              Don&rsquo;t see the right role?
-            </h2>
+            <h2 className="text-display-md text-white">Don&rsquo;t see the right role?</h2>
             <p className="text-body-lg mt-5 !text-neutral-400 max-w-xl mx-auto">
               We&rsquo;re always open to exceptional talent.
             </p>
-            <div className="mt-10">
+            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button
                 href="mailto:careers@ficuslogic.com"
                 variant="primary"
                 className="!bg-white !text-neutral-900 hover:!bg-neutral-200"
               >
                 Get in Touch
+              </Button>
+              <Button
+                href={listingsUrl}
+                variant="ghost"
+                className="!text-white !border-white/40 hover:!bg-white/10"
+              >
+                Hirebound listings
               </Button>
             </div>
           </AnimatedSection>

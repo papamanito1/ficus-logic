@@ -27,14 +27,26 @@ export default function Card({
   const classes = cn(variantClasses[variant], className)
 
   if (href) {
+    const external = /^https?:\/\//i.test(href)
     return (
       <motion.div
         whileHover={{ y: -4 }}
         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
       >
-        <Link href={href} className={cn(classes, 'block')}>
-          {children}
-        </Link>
+        {external ? (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(classes, 'block')}
+          >
+            {children}
+          </a>
+        ) : (
+          <Link href={href} className={cn(classes, 'block')}>
+            {children}
+          </Link>
+        )}
       </motion.div>
     )
   }
