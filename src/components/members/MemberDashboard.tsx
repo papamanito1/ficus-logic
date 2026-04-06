@@ -29,6 +29,17 @@ const emptyInsightForm = {
   tags: '',
 }
 
+const emptyRoleForm = () => ({
+  hireboundUrl: '',
+  id: '',
+  title: '',
+  location: '',
+  department: 'Ficus Logic',
+  employmentType: 'Full-time',
+  postedDate: new Date().toISOString().slice(0, 10),
+  summary: '',
+})
+
 export default function MemberDashboard() {
   const [tab, setTab] = useState<Tab>('insights')
   const [message, setMessage] = useState<string | null>(null)
@@ -39,27 +50,11 @@ export default function MemberDashboard() {
   const [insightForm, setInsightForm] = useState(emptyInsightForm)
 
   const [careers, setCareers] = useState<CareersPayload | null>(null)
-
-  const [careerPageUrl, setCareerPageUrl] = useState('')
-  const [careerImportBusy, setCareerImportBusy] = useState(false)
-
-  const [roleForm, setRoleForm] = useState({
-    id: '',
-    title: '',
-    location: '',
-    department: '',
-    employmentType: 'Full-time',
-    postedDate: new Date().toISOString().slice(0, 10),
-    summary: '',
-    externalUrl: 'https://in.app.hirebound.io/hb/openings',
-  })
+  const [roleForm, setRoleForm] = useState(emptyRoleForm())
 
   const loadInsights = useCallback(async () => {
     const r = await fetch('/api/members/insights')
-    if (!r.ok) {
-      setError('Could not load insights.')
-      return
-    }
+    if (!r.ok) { setError('Could not load insights.'); return }
     const data = (await r.json()) as { posts: BlogPost[]; kvConfigured: boolean }
     setPosts(data.posts)
     setInsightsKv(data.kvConfigured)
@@ -67,10 +62,7 @@ export default function MemberDashboard() {
 
   const loadCareers = useCallback(async () => {
     const r = await fetch('/api/members/careers')
-    if (!r.ok) {
-      setError('Could not load careers.')
-      return
-    }
+    if (!r.ok) { setError('Could not load careers.'); return }
     setCareers((await r.json()) as CareersPayload)
   }, [])
 
@@ -90,16 +82,13 @@ export default function MemberDashboard() {
       body: JSON.stringify(body),
     })
     const data = (await r.json().catch(() => ({}))) as { error?: string }
-    if (!r.ok) {
-      setError(data.error ?? 'Request failed')
-      return false
-    }
+    if (!r.ok) { setError(data.error ?? 'Request failed'); return false }
     setMessage('Saved. The public site will update shortly.')
     return true
   }
 
   async function deletePost(slug: string) {
-    if (!confirm(`Remove “${slug}” from the live site?`)) return
+    if (!confirm(`Remove "${slug}" from the live site?`)) return
     const ok = await postJson('/api/members/insights', { action: 'delete', slug })
     if (ok) await loadInsights()
   }
@@ -112,10 +101,7 @@ export default function MemberDashboard() {
       excerpt: insightForm.excerpt.trim() || insightForm.title.trim(),
       content: insightForm.content.trim(),
       category: insightForm.category.trim(),
-      tags: insightForm.tags
-        .split(',')
-        .map((t) => t.trim())
-        .filter(Boolean),
+      tags: insightForm.tags.split(',').map((t) => t.trim()).filter(Boolean),
       author: insightForm.author.trim(),
       publishedDate: insightForm.publishedDate.trim(),
       readTime: insightForm.readTime.trim(),
@@ -125,10 +111,7 @@ export default function MemberDashboard() {
         'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=800&fit=crop',
     }
     const ok = await postJson('/api/members/insights', { action: 'upsert', post })
-    if (ok) {
-      setInsightForm(emptyInsightForm)
-      await loadInsights()
-    }
+    if (ok) { setInsightForm(emptyInsightForm); await loadInsights() }
   }
 
   async function hideCareer(id: string) {
@@ -142,71 +125,45 @@ export default function MemberDashboard() {
   }
 
   async function removeManual(id: string) {
+    if (!confirm('Remove this role from the careers page?')) return
     const ok = await postJson('/api/members/careers', { action: 'removeManual', id })
     if (ok) await loadCareers()
   }
 
-  async function importFromCareerPageLink() {
-    const url = careerPageUrl.trim()
-    if (!url) {
-      setError('Paste a Hirebound career page URL first.')
-      return
-    }
-    setError(null)
-    setMessage(null)
-    setCareerImportBusy(true)
+  function onHireboundUrlChange(url: string) {
     try {
-      const r = await fetch('/api/members/careers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'importCareerPageUrl', careerPageUrl: url }),
-      })
-      const data = (await r.json().catch(() => ({}))) as {
-        error?: string
-        role?: HireboundCareerOpening
-      }
-      if (!r.ok) {
-        setError(data.error ?? 'Import failed')
+      const u = new URL(url.trim())
+      const match = u.pathname.replace(/\/+$/, '').match(/\/position\/([^/?#]+)$/i)
+      if (match) {
+        setRoleForm((f) => ({ ...f, hireboundUrl: url, id: match[1] }))
         return
       }
-      setMessage(
-        data.role?.title
-          ? `Added “${data.role.title}” to careers with Ficus e-Logic branding.`
-          : 'Role added to careers.',
-      )
-      setCareerPageUrl('')
-      await loadCareers()
-    } finally {
-      setCareerImportBusy(false)
-    }
+    } catch { /* ignore invalid URL while typing */ }
+    setRoleForm((f) => ({ ...f, hireboundUrl: url }))
   }
 
   async function submitRole(e: React.FormEvent) {
     e.preventDefault()
+    const url = roleForm.hireboundUrl.trim()
+    const idFromUrl = (() => {
+      try {
+        const u = new URL(url)
+        const m = u.pathname.replace(/\/+$/, '').match(/\/position\/([^/?#]+)$/i)
+        return m ? m[1] : ''
+      } catch { return '' }
+    })()
     const role: HireboundCareerOpening = {
-      id: roleForm.id.trim(),
+      id: roleForm.id.trim() || idFromUrl || `role-${Date.now()}`,
       title: roleForm.title.trim(),
-      location: roleForm.location.trim() || 'Location TBC',
-      department: roleForm.department.trim() || 'General',
+      location: roleForm.location.trim() || 'India',
+      department: roleForm.department.trim() || 'Ficus Logic',
       employmentType: roleForm.employmentType.trim() || 'Full-time',
       postedDate: roleForm.postedDate.trim(),
       summary: roleForm.summary.trim(),
-      externalUrl: roleForm.externalUrl.trim(),
+      externalUrl: url || 'https://careerpage.hirebound.io/org/ficuslogic',
     }
     const ok = await postJson('/api/members/careers', { action: 'upsertManual', role })
-    if (ok) {
-      setRoleForm({
-        id: '',
-        title: '',
-        location: '',
-        department: '',
-        employmentType: 'Full-time',
-        postedDate: new Date().toISOString().slice(0, 10),
-        summary: '',
-        externalUrl: 'https://in.app.hirebound.io/hb/openings',
-      })
-      await loadCareers()
-    }
+    if (ok) { setRoleForm(emptyRoleForm()); await loadCareers() }
   }
 
   const hiddenSet = careers ? new Set(careers.delta.hiddenIds) : new Set()
@@ -220,8 +177,7 @@ export default function MemberDashboard() {
           <div>
             <h1 className="text-display-sm text-neutral-900">Member dashboard</h1>
             <p className="text-body-sm text-neutral-600 mt-2">
-              Manage Insights posts and Careers listings. Changes apply on the live site when Vercel KV
-              and env credentials are configured.
+              Manage Insights posts and Careers listings. Changes go live instantly.
             </p>
           </div>
           <Button
@@ -261,12 +217,12 @@ export default function MemberDashboard() {
           </p>
         )}
 
+        {/* ── INSIGHTS TAB ───────────────────────────────────────── */}
         {tab === 'insights' && (
           <div className="space-y-10">
             {!insightsKv && (
               <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
-                KV_REST_API_URL and KV_REST_API_TOKEN are not set in this environment. Publishing
-                changes from this dashboard requires Vercel KV (or compatible) configuration.
+                KV_REST_API_URL and KV_REST_API_TOKEN are not set. Publishing requires Vercel KV.
               </p>
             )}
 
@@ -281,8 +237,7 @@ export default function MemberDashboard() {
                     <div>
                       <p className="font-medium text-neutral-900">{p.title}</p>
                       <p className="text-xs text-neutral-500 mt-1">
-                        /insights/{p.slug}
-                        {p.featured ? ' · featured' : ''}
+                        /insights/{p.slug}{p.featured ? ' · featured' : ''}
                       </p>
                     </div>
                     <button
@@ -307,8 +262,8 @@ export default function MemberDashboard() {
                 className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-6"
               >
                 <p className="text-sm text-neutral-600">
-                  Slug must be lowercase with hyphens only (e.g. <code className="text-xs">my-new-post</code>
-                  ). Use a new slug to add; an existing slug updates that article.
+                  Slug must be lowercase with hyphens only (e.g. <code className="text-xs">my-new-post</code>).
+                  Use a new slug to add; an existing slug updates that article.
                 </p>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <label className="text-sm">
@@ -339,7 +294,9 @@ export default function MemberDashboard() {
                   />
                 </label>
                 <label className="text-sm">
-                  <span className="text-neutral-600 block mb-1">Body (paragraphs separated by blank lines; ## headings; - bullets)</span>
+                  <span className="text-neutral-600 block mb-1">
+                    Body (paragraphs separated by blank lines; ## headings; - bullets)
+                  </span>
                   <textarea
                     required
                     rows={8}
@@ -407,7 +364,7 @@ export default function MemberDashboard() {
                     checked={insightForm.featured}
                     onChange={(e) => setInsightForm((f) => ({ ...f, featured: e.target.checked }))}
                   />
-                  Featured on home (when marked featured in merged feed)
+                  Featured on home page
                 </label>
                 <Button type="submit" variant="primary" disabled={!insightsKv}>
                   Publish post
@@ -417,6 +374,7 @@ export default function MemberDashboard() {
           </div>
         )}
 
+        {/* ── CAREERS TAB ───────────────────────────────────────── */}
         {tab === 'careers' && careers && (
           <div className="space-y-10">
             {!careers.kvConfigured && (
@@ -426,43 +384,119 @@ export default function MemberDashboard() {
               </p>
             )}
 
+            {/* Add role form */}
             <section>
-              <h2 className="text-lg font-medium text-neutral-900 mb-4">
-                Add role from Hirebound career page link
-              </h2>
-              <div className="rounded-xl border border-neutral-200 bg-white p-6 space-y-4">
-                <p className="text-sm text-neutral-600">
-                  Paste a URL like{' '}
-                  <code className="text-xs bg-neutral-100 px-1.5 py-0.5 rounded break-all">
-                    https://careerpage.hirebound.io/org/ficuslogic/position/&lt;id&gt;/
-                  </code>
-                  . We match the role from your Hirebound feed (or API if configured), list it under{' '}
-                  <strong className="text-neutral-800">Ficus Logic</strong> on the careers page, and send
-                  applicants to your branded Hirebound page to apply.
-                </p>
-                <label className="block text-sm">
-                  <span className="text-neutral-600 block mb-1">Career page URL</span>
+              <h2 className="text-lg font-medium text-neutral-900 mb-1">Add a role to the careers page</h2>
+              <p className="text-sm text-neutral-500 mb-4">
+                Paste the Hirebound career page link — it becomes the &ldquo;Apply&rdquo; button. Then fill
+                in the job details exactly as they appear on that page.
+              </p>
+              <form
+                onSubmit={(e) => void submitRole(e)}
+                className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-6"
+              >
+                {/* Hirebound URL — full width, prominent */}
+                <label className="text-sm">
+                  <span className="text-neutral-700 font-medium block mb-1">
+                    Hirebound career page URL
+                    <span className="font-normal text-neutral-500 ml-1">(the link you want applicants to visit)</span>
+                  </span>
                   <input
                     type="url"
+                    required
                     className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
-                    placeholder="https://careerpage.hirebound.io/org/.../position/.../"
-                    value={careerPageUrl}
-                    onChange={(e) => setCareerPageUrl(e.target.value)}
+                    placeholder="https://careerpage.hirebound.io/org/ficuslogic/position/…/"
+                    value={roleForm.hireboundUrl}
+                    onChange={(e) => onHireboundUrlChange(e.target.value)}
                   />
+                  {roleForm.id && (
+                    <span className="text-xs text-neutral-400 mt-1 block">
+                      Position ID detected: <code>{roleForm.id}</code>
+                    </span>
+                  )}
                 </label>
-                <Button
-                  type="button"
-                  variant="primary"
-                  disabled={!careers.kvConfigured || careerImportBusy}
-                  onClick={() => void importFromCareerPageLink()}
-                >
-                  {careerImportBusy ? 'Importing…' : 'Import role'}
+
+                <div className="border-t border-neutral-100 pt-4">
+                  <p className="text-xs text-neutral-500 mb-3 uppercase tracking-wide font-medium">
+                    Job details — enter these from the Hirebound page
+                  </p>
+                  <div className="grid gap-4">
+                    <label className="text-sm">
+                      <span className="text-neutral-600 block mb-1">Job title <span className="text-red-500">*</span></span>
+                      <input
+                        required
+                        className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                        placeholder="e.g. Senior Executive Search Consultant"
+                        value={roleForm.title}
+                        onChange={(e) => setRoleForm((f) => ({ ...f, title: e.target.value }))}
+                      />
+                    </label>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <label className="text-sm">
+                        <span className="text-neutral-600 block mb-1">Location</span>
+                        <input
+                          className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                          placeholder="e.g. Mumbai, India"
+                          value={roleForm.location}
+                          onChange={(e) => setRoleForm((f) => ({ ...f, location: e.target.value }))}
+                        />
+                      </label>
+                      <label className="text-sm">
+                        <span className="text-neutral-600 block mb-1">Department</span>
+                        <input
+                          className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                          placeholder="e.g. Ficus Logic"
+                          value={roleForm.department}
+                          onChange={(e) => setRoleForm((f) => ({ ...f, department: e.target.value }))}
+                        />
+                      </label>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <label className="text-sm">
+                        <span className="text-neutral-600 block mb-1">Employment type</span>
+                        <select
+                          className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm bg-white"
+                          value={roleForm.employmentType}
+                          onChange={(e) => setRoleForm((f) => ({ ...f, employmentType: e.target.value }))}
+                        >
+                          <option>Full-time</option>
+                          <option>Part-time</option>
+                          <option>Contract</option>
+                          <option>Internship</option>
+                        </select>
+                      </label>
+                      <label className="text-sm">
+                        <span className="text-neutral-600 block mb-1">Posted date</span>
+                        <input
+                          type="date"
+                          className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                          value={roleForm.postedDate}
+                          onChange={(e) => setRoleForm((f) => ({ ...f, postedDate: e.target.value }))}
+                        />
+                      </label>
+                    </div>
+                    <label className="text-sm">
+                      <span className="text-neutral-600 block mb-1">Job summary / description</span>
+                      <textarea
+                        rows={4}
+                        className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                        placeholder="Brief description of the role shown on the careers page…"
+                        value={roleForm.summary}
+                        onChange={(e) => setRoleForm((f) => ({ ...f, summary: e.target.value }))}
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <Button type="submit" variant="primary" disabled={!careers.kvConfigured}>
+                  Add to careers page
                 </Button>
-              </div>
+              </form>
             </section>
 
+            {/* Live roles from Hirebound feed */}
             <section>
-              <h2 className="text-lg font-medium text-neutral-900 mb-4">Roles from Hirebound (live)</h2>
+              <h2 className="text-lg font-medium text-neutral-900 mb-4">Roles from Hirebound feed</h2>
               <ul className="divide-y divide-neutral-200 rounded-xl border border-neutral-200 bg-white">
                 {visibleFromFeed.map((o) => (
                   <li
@@ -472,7 +506,7 @@ export default function MemberDashboard() {
                     <div>
                       <p className="font-medium text-neutral-900">{o.title}</p>
                       <p className="text-xs text-neutral-500 mt-1">
-                        {o.department} · {o.location} · id: {o.id}
+                        {o.department} · {o.location}
                       </p>
                     </div>
                     <button
@@ -487,7 +521,7 @@ export default function MemberDashboard() {
                 ))}
                 {visibleFromFeed.length === 0 && (
                   <li className="px-4 py-8 text-center text-neutral-500 text-sm">
-                    No visible feed roles, or Hirebound is not configured.
+                    No Hirebound feed roles (HIREBOUND_BEARER_TOKEN not configured).
                   </li>
                 )}
               </ul>
@@ -504,7 +538,7 @@ export default function MemberDashboard() {
                     >
                       <div>
                         <p className="font-medium text-neutral-900">{o.title}</p>
-                        <p className="text-xs text-neutral-500 mt-1">id: {o.id}</p>
+                        <p className="text-xs text-neutral-500 mt-1">{o.location}</p>
                       </div>
                       <button
                         type="button"
@@ -520,9 +554,12 @@ export default function MemberDashboard() {
               </section>
             )}
 
+            {/* Listed roles */}
             <section>
-              <h2 className="text-lg font-medium text-neutral-900 mb-4">Manual roles (custom listings)</h2>
-              <ul className="divide-y divide-neutral-200 rounded-xl border border-neutral-200 bg-white mb-6">
+              <h2 className="text-lg font-medium text-neutral-900 mb-4">
+                Roles currently listed on site
+              </h2>
+              <ul className="divide-y divide-neutral-200 rounded-xl border border-neutral-200 bg-white">
                 {careers.delta.manualRoles.map((o) => (
                   <li
                     key={o.id}
@@ -530,7 +567,19 @@ export default function MemberDashboard() {
                   >
                     <div>
                       <p className="font-medium text-neutral-900">{o.title}</p>
-                      <p className="text-xs text-neutral-500 mt-1">{o.id}</p>
+                      <p className="text-xs text-neutral-500 mt-1">
+                        {o.department} · {o.location} · {o.employmentType}
+                      </p>
+                      {o.externalUrl && (
+                        <a
+                          href={o.externalUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-accent-600 hover:underline mt-0.5 block truncate max-w-xs"
+                        >
+                          {o.externalUrl}
+                        </a>
+                      )}
                     </div>
                     <button
                       type="button"
@@ -543,94 +592,11 @@ export default function MemberDashboard() {
                   </li>
                 ))}
                 {careers.delta.manualRoles.length === 0 && (
-                  <li className="px-4 py-6 text-center text-neutral-500 text-sm">No manual roles yet.</li>
+                  <li className="px-4 py-6 text-center text-neutral-500 text-sm">
+                    No roles added yet. Use the form above to add one.
+                  </li>
                 )}
               </ul>
-
-              <h3 className="text-base font-medium text-neutral-900 mb-3">Add manual role</h3>
-              <form
-                onSubmit={(e) => void submitRole(e)}
-                className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-6"
-              >
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <label className="text-sm">
-                    <span className="text-neutral-600 block mb-1">Stable id (no spaces)</span>
-                    <input
-                      required
-                      className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
-                      placeholder="custom-role-2026"
-                      value={roleForm.id}
-                      onChange={(e) => setRoleForm((f) => ({ ...f, id: e.target.value }))}
-                    />
-                  </label>
-                  <label className="text-sm">
-                    <span className="text-neutral-600 block mb-1">Title</span>
-                    <input
-                      required
-                      className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
-                      value={roleForm.title}
-                      onChange={(e) => setRoleForm((f) => ({ ...f, title: e.target.value }))}
-                    />
-                  </label>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <label className="text-sm">
-                    <span className="text-neutral-600 block mb-1">Location</span>
-                    <input
-                      className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
-                      value={roleForm.location}
-                      onChange={(e) => setRoleForm((f) => ({ ...f, location: e.target.value }))}
-                    />
-                  </label>
-                  <label className="text-sm">
-                    <span className="text-neutral-600 block mb-1">Department</span>
-                    <input
-                      className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
-                      value={roleForm.department}
-                      onChange={(e) => setRoleForm((f) => ({ ...f, department: e.target.value }))}
-                    />
-                  </label>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <label className="text-sm">
-                    <span className="text-neutral-600 block mb-1">Employment type</span>
-                    <input
-                      className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
-                      value={roleForm.employmentType}
-                      onChange={(e) => setRoleForm((f) => ({ ...f, employmentType: e.target.value }))}
-                    />
-                  </label>
-                  <label className="text-sm">
-                    <span className="text-neutral-600 block mb-1">Posted date</span>
-                    <input
-                      type="date"
-                      className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
-                      value={roleForm.postedDate}
-                      onChange={(e) => setRoleForm((f) => ({ ...f, postedDate: e.target.value }))}
-                    />
-                  </label>
-                </div>
-                <label className="text-sm">
-                  <span className="text-neutral-600 block mb-1">Summary</span>
-                  <textarea
-                    rows={3}
-                    className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
-                    value={roleForm.summary}
-                    onChange={(e) => setRoleForm((f) => ({ ...f, summary: e.target.value }))}
-                  />
-                </label>
-                <label className="text-sm">
-                  <span className="text-neutral-600 block mb-1">Apply / external URL</span>
-                  <input
-                    className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
-                    value={roleForm.externalUrl}
-                    onChange={(e) => setRoleForm((f) => ({ ...f, externalUrl: e.target.value }))}
-                  />
-                </label>
-                <Button type="submit" variant="primary" disabled={!careers.kvConfigured}>
-                  Save manual role
-                </Button>
-              </form>
             </section>
           </div>
         )}
