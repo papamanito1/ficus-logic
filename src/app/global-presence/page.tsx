@@ -4,19 +4,12 @@ import AnimatedSection from '@/components/ui/AnimatedSection'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import PageHero from '@/components/PageHero'
-import { partnerCompanies, globalRegions } from '@/data/partners'
+import { globalRegions } from '@/data/partners'
 
 export const metadata: Metadata = {
   title: 'Global Presence | Ficus Logic',
   description:
     'Executive search from India across the Far East, Middle East, Africa, and APAC & ANZ. Local depth with cross-border coordination.',
-}
-
-const typeBadgeColors: Record<string, string> = {
-  Headquarters: 'bg-brand-500/10 text-brand-700',
-  Subsidiary: 'bg-accent-500/10 text-accent-700',
-  'Partner Entity': 'bg-neutral-200 text-neutral-700',
-  'Search Partner': 'bg-neutral-200 text-neutral-700',
 }
 
 const stats = [
@@ -79,45 +72,6 @@ export default function GlobalPresencePage() {
                     ))}
                   </div>
                   <p className="text-body mt-5">{region.description}</p>
-                </Card>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Partner Companies */}
-      <section className="section-padding bg-white">
-        <div className="container-premium">
-          <SectionHeading
-            heading="Our operating entities and partners."
-            subtitle="Direct presence and strategic partnerships worldwide."
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16 lg:mt-20">
-            {partnerCompanies.map((company, i) => (
-              <AnimatedSection key={company.name} delay={i * 0.08}>
-                <Card variant="premium" className="p-8 lg:p-10 h-full">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="text-lg font-medium text-neutral-900">
-                        {company.name}
-                      </h3>
-                      <p className="text-body-sm mt-1">{company.country}</p>
-                    </div>
-                    <span
-                      className={`text-xs font-medium px-3 py-1 rounded-full whitespace-nowrap ${
-                        typeBadgeColors[company.type] || 'bg-neutral-200 text-neutral-700'
-                      }`}
-                    >
-                      {company.type}
-                    </span>
-                  </div>
-                  <div className="w-12 h-px bg-brand-500 mt-6 mb-6" />
-                  <p className="text-sm font-medium text-neutral-700 mb-2">
-                    {company.coverage}
-                  </p>
-                  <p className="text-body-sm">{company.description}</p>
                 </Card>
               </AnimatedSection>
             ))}
