@@ -32,7 +32,7 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3">
               {footerNavigation.services.map((item) => (
-                <li key={item.href}>
+                <li key={`${item.label}-${item.href}`}>
                   <Link
                     href={item.href}
                     className="text-sm text-neutral-500 hover:text-white transition-colors duration-300"

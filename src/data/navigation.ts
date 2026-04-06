@@ -15,6 +15,7 @@ export const navigation: NavItem[] = [
   { label: 'Insights', href: '/insights' },
   { label: 'Contact Us', href: '/contact' },
   { label: 'Experience FELIX', href: '/somika-ai' },
+  { label: 'Member login', href: '/members/login' },
 ]
 
 export const footerNavigation = {
@@ -23,7 +24,7 @@ export const footerNavigation = {
     { label: 'Niche Mandates', href: '/niche-hiring' },
     { label: 'Industry', href: '/industries' },
     { label: 'Experience FELIX', href: '/somika-ai' },
-    { label: 'Member portal', href: '/members/login' },
+    { label: 'Member login', href: '/members/login' },
   ],
   company: [
     { label: 'About Us', href: '/about' },
