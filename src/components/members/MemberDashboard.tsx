@@ -40,6 +40,9 @@ export default function MemberDashboard() {
 
   const [careers, setCareers] = useState<CareersPayload | null>(null)
 
+  const [careerPageUrl, setCareerPageUrl] = useState('')
+  const [careerImportBusy, setCareerImportBusy] = useState(false)
+
   const [roleForm, setRoleForm] = useState({
     id: '',
     title: '',
@@ -141,6 +144,41 @@ export default function MemberDashboard() {
   async function removeManual(id: string) {
     const ok = await postJson('/api/members/careers', { action: 'removeManual', id })
     if (ok) await loadCareers()
+  }
+
+  async function importFromCareerPageLink() {
+    const url = careerPageUrl.trim()
+    if (!url) {
+      setError('Paste a Hirebound career page URL first.')
+      return
+    }
+    setError(null)
+    setMessage(null)
+    setCareerImportBusy(true)
+    try {
+      const r = await fetch('/api/members/careers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'importCareerPageUrl', careerPageUrl: url }),
+      })
+      const data = (await r.json().catch(() => ({}))) as {
+        error?: string
+        role?: HireboundCareerOpening
+      }
+      if (!r.ok) {
+        setError(data.error ?? 'Import failed')
+        return
+      }
+      setMessage(
+        data.role?.title
+          ? `Added “${data.role.title}” to careers with Ficus e-Logic branding.`
+          : 'Role added to careers.',
+      )
+      setCareerPageUrl('')
+      await loadCareers()
+    } finally {
+      setCareerImportBusy(false)
+    }
   }
 
   async function submitRole(e: React.FormEvent) {
@@ -387,6 +425,41 @@ export default function MemberDashboard() {
                 KV_REST_API_TOKEN are set.
               </p>
             )}
+
+            <section>
+              <h2 className="text-lg font-medium text-neutral-900 mb-4">
+                Add role from Hirebound career page link
+              </h2>
+              <div className="rounded-xl border border-neutral-200 bg-white p-6 space-y-4">
+                <p className="text-sm text-neutral-600">
+                  Paste a URL like{' '}
+                  <code className="text-xs bg-neutral-100 px-1.5 py-0.5 rounded break-all">
+                    https://careerpage.hirebound.io/org/ficuslogic/position/&lt;id&gt;/
+                  </code>
+                  . We match the role from your Hirebound feed (or API if configured), list it under{' '}
+                  <strong className="text-neutral-800">Ficus Logic</strong> on the careers page, and send
+                  applicants to your branded Hirebound page to apply.
+                </p>
+                <label className="block text-sm">
+                  <span className="text-neutral-600 block mb-1">Career page URL</span>
+                  <input
+                    type="url"
+                    className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                    placeholder="https://careerpage.hirebound.io/org/.../position/.../"
+                    value={careerPageUrl}
+                    onChange={(e) => setCareerPageUrl(e.target.value)}
+                  />
+                </label>
+                <Button
+                  type="button"
+                  variant="primary"
+                  disabled={!careers.kvConfigured || careerImportBusy}
+                  onClick={() => void importFromCareerPageLink()}
+                >
+                  {careerImportBusy ? 'Importing…' : 'Import role'}
+                </Button>
+              </div>
+            </section>
 
             <section>
               <h2 className="text-lg font-medium text-neutral-900 mb-4">Roles from Hirebound (live)</h2>

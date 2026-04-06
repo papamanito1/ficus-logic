@@ -8,6 +8,7 @@
  *
  * Optional override (skips Hirebound API):
  * - HIREBOUND_OPENINGS_JSON_URL — HTTPS URL returning JSON array or { data: [...] }
+ * - HIREBOUND_OPENING_BY_ID_PATH — optional, e.g. /hb/openings/{id} (default tries common paths)
  *
  * Public URL template for “View role” / Apply (browser):
  * - NEXT_PUBLIC_HIREBOUND_JOB_URL_TEMPLATE — must include {id}; default
@@ -158,6 +159,64 @@ async function fetchFromHireboundApi(): Promise<HireboundCareerOpening[]> {
   return extractArray(json)
     .map((row) => normalizeOpening(row))
     .filter((x): x is HireboundCareerOpening => x !== null)
+}
+
+function unwrapOpeningPayload(json: unknown): Record<string, unknown> | null {
+  if (!json || typeof json !== 'object') return null
+  const o = json as Record<string, unknown>
+  const data = o.data
+  if (data && typeof data === 'object' && !Array.isArray(data)) {
+    return data as Record<string, unknown>
+  }
+  if (typeof o._id === 'string' || typeof o.id === 'string' || typeof o.title === 'string') {
+    return o
+  }
+  return null
+}
+
+/**
+ * Fetch a single opening by id when HIREBOUND_BEARER_TOKEN is set.
+ * Tries common REST paths; returns null if not found or unauthenticated.
+ */
+export async function fetchHireboundOpeningById(id: string): Promise<HireboundCareerOpening | null> {
+  const token = process.env.HIREBOUND_BEARER_TOKEN?.trim()
+  if (!token || !id.trim()) return null
+
+  const base = (process.env.HIREBOUND_API_BASE ?? 'https://inapiprod.hirebound.io').replace(/\/$/, '')
+  const tenant = (process.env.HIREBOUND_TENANT ?? 'hb').replace(/^\//, '').replace(/\/$/, '')
+  const enc = encodeURIComponent(id.trim())
+
+  const paths = [
+    process.env.HIREBOUND_OPENING_BY_ID_PATH?.trim()?.replace(/\{id\}/g, id.trim()),
+    `/${tenant}/openings/${enc}`,
+    `/${tenant}/opening/${enc}`,
+  ].filter(Boolean) as string[]
+
+  for (const path of paths) {
+    const url = `${base}${path.startsWith('/') ? path : `/${path}`}`
+    try {
+      const res = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          tenantid: tenant,
+          Accept: 'application/json',
+        },
+        next: { revalidate: 0 },
+      })
+      if (!res.ok) continue
+      const json: unknown = await res.json()
+      const row = unwrapOpeningPayload(json)
+      if (row) {
+        const opening = normalizeOpening(row)
+        if (opening && opening.id === id.trim()) return opening
+        if (opening && pickId(row) === id.trim()) return opening
+        if (opening) return { ...opening, id: id.trim() }
+      }
+    } catch {
+      continue
+    }
+  }
+  return null
 }
 
 /** Raw feed from Hirebound API or JSON URL (no member dashboard merge). */

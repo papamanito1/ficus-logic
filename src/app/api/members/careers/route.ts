@@ -14,6 +14,7 @@ import {
   unhideCareerOpeningId,
   upsertManualCareerRole,
 } from '@/lib/careers-merge'
+import { buildOpeningFromCareerPageUrl } from '@/lib/hirebound-career-page-url'
 
 function parseRole(raw: unknown): HireboundCareerOpening {
   if (!raw || typeof raw !== 'object') throw new Error('Invalid role')
@@ -68,6 +69,7 @@ export async function POST(req: Request) {
       action?: string
       id?: string
       role?: unknown
+      careerPageUrl?: string
     }
     if (body.action === 'hide') {
       const id = String(body.id ?? '').trim()
@@ -91,6 +93,16 @@ export async function POST(req: Request) {
       revalidatePath('/careers')
       revalidatePath('/')
       return NextResponse.json({ ok: true })
+    }
+    if (body.action === 'importCareerPageUrl') {
+      const url = String(body.careerPageUrl ?? '').trim()
+      if (!url) return NextResponse.json({ error: 'careerPageUrl required' }, { status: 400 })
+      const base = await fetchHireboundSourceOpenings()
+      const role = await buildOpeningFromCareerPageUrl(url, base)
+      await upsertManualCareerRole(role)
+      revalidatePath('/careers')
+      revalidatePath('/')
+      return NextResponse.json({ ok: true, role })
     }
     if (body.action === 'removeManual') {
       const id = String(body.id ?? '').trim()
