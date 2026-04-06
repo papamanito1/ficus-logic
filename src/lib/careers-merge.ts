@@ -17,8 +17,9 @@ export async function loadCareersDelta(): Promise<CareersDelta> {
     const raw = await kv.get<unknown>(KV_KEY)
     if (!raw) return empty()
     let parsed: unknown = raw
-    if (typeof raw === 'string') {
-      try { parsed = JSON.parse(raw) } catch { return empty() }
+    let depth = 0
+    while (typeof parsed === 'string' && depth < 5) {
+      try { parsed = JSON.parse(parsed); depth++ } catch { break }
     }
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return empty()
     const p = parsed as Partial<CareersDelta>

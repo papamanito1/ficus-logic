@@ -18,8 +18,9 @@ export async function loadDelta(): Promise<InsightsDelta> {
     const raw = await kv.get<unknown>(KV_KEY)
     if (!raw) return emptyDelta()
     let parsed: unknown = raw
-    if (typeof raw === 'string') {
-      try { parsed = JSON.parse(raw) } catch { return emptyDelta() }
+    let depth = 0
+    while (typeof parsed === 'string' && depth < 5) {
+      try { parsed = JSON.parse(parsed); depth++ } catch { break }
     }
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return emptyDelta()
     const p = parsed as Partial<InsightsDelta>
