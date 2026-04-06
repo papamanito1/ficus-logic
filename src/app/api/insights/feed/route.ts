@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getMergedPublishedPosts } from '@/lib/insights-merge'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const posts = await getMergedPublishedPosts()

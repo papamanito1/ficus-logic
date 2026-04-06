@@ -1,0 +1,29 @@
+WHY MEMBER LOGIN / API ROUTES 404 ON ficus-logic.vercel.app
+------------------------------------------------------------
+We checked the live site: /members/login and /api/careers/openings return 404,
+while / and /api/auth/providers return 200. That means Production is an OLD
+deployment from before those routes existed — not a bug in the React footer.
+
+WHAT TO DO IN VERCEL (required)
+-------------------------------
+1. Open the Vercel project that owns ficus-logic.vercel.app.
+2. Settings → Git:
+   - Connected repository: papamanito1/ficus-logic
+   - Production Branch: master  (this repo only has "master", not "main")
+3. Deployments: find the latest deployment for branch master. Open it.
+   - Build must Succeed (not Error / Canceled).
+   - The commit should match GitHub (see short SHA on github.com/.../ficus-logic/commits/master).
+4. If there is no new deployment after your last git push:
+   - Deployments → ⋮ on latest → Redeploy (enable "Use existing Build Cache" OFF once).
+5. Settings → General → Root Directory: leave EMPTY (repo root). If this points at a
+   subfolder that does not contain this Next.js app, routes will never match.
+
+VERIFY AFTER A GOOD DEPLOY
+--------------------------
+- https://ficus-logic.vercel.app/api/health/deployment
+  JSON should include "vercelGitCommitSha" equal to the latest GitHub commit SHA.
+- https://ficus-logic.vercel.app/members/login  should show the sign-in form.
+- Home page HTML should contain the text "Member login" (footer + header).
+
+NOTE: ficuslogic.com (Wix) is a different site and will not show this app until
+you point that domain’s DNS at this Vercel project and assign the domain in Vercel.
