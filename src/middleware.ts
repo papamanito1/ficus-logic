@@ -9,15 +9,25 @@ function isPublicFelixPath(pathname: string): boolean {
   return false
 }
 
+function isMemberLoginPath(pathname: string): boolean {
+  return pathname === '/members/login' || pathname === '/members/login/'
+}
+
 export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname
-  const token = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-  })
+
+  let token: Awaited<ReturnType<typeof getToken>> = null
+  try {
+    token = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET,
+    })
+  } catch {
+    // Missing/invalid NEXTAUTH_SECRET on Edge: still allow public routes below
+  }
 
   if (path.startsWith('/members')) {
-    if (path === '/members/login') {
+    if (isMemberLoginPath(path)) {
       return NextResponse.next()
     }
     if (token?.authKind !== 'member') {
