@@ -15,12 +15,17 @@ const emptyDelta = (): InsightsDelta => ({ deletedSlugs: [], upserts: [] })
 export async function loadDelta(): Promise<InsightsDelta> {
   try {
     const { kv } = await import('@vercel/kv')
-    const raw = await kv.get<string>(KV_KEY)
-    if (!raw || typeof raw !== 'string') return emptyDelta()
-    const parsed = JSON.parse(raw) as Partial<InsightsDelta>
+    const raw = await kv.get<unknown>(KV_KEY)
+    if (!raw) return emptyDelta()
+    let parsed: unknown = raw
+    if (typeof raw === 'string') {
+      try { parsed = JSON.parse(raw) } catch { return emptyDelta() }
+    }
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return emptyDelta()
+    const p = parsed as Partial<InsightsDelta>
     return {
-      deletedSlugs: Array.isArray(parsed.deletedSlugs) ? parsed.deletedSlugs : [],
-      upserts: Array.isArray(parsed.upserts) ? parsed.upserts : [],
+      deletedSlugs: Array.isArray(p.deletedSlugs) ? p.deletedSlugs : [],
+      upserts: Array.isArray(p.upserts) ? p.upserts : [],
     }
   } catch {
     return emptyDelta()
@@ -29,7 +34,7 @@ export async function loadDelta(): Promise<InsightsDelta> {
 
 export async function saveDelta(delta: InsightsDelta): Promise<void> {
   const { kv } = await import('@vercel/kv')
-  await kv.set(KV_KEY, JSON.stringify(delta))
+  await kv.set(KV_KEY, delta)
 }
 
 function mergePosts(delta: InsightsDelta): BlogPost[] {

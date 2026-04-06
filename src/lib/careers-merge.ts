@@ -14,12 +14,17 @@ const empty = (): CareersDelta => ({ hiddenIds: [], manualRoles: [] })
 export async function loadCareersDelta(): Promise<CareersDelta> {
   try {
     const { kv } = await import('@vercel/kv')
-    const raw = await kv.get<string>(KV_KEY)
-    if (!raw || typeof raw !== 'string') return empty()
-    const parsed = JSON.parse(raw) as Partial<CareersDelta>
+    const raw = await kv.get<unknown>(KV_KEY)
+    if (!raw) return empty()
+    let parsed: unknown = raw
+    if (typeof raw === 'string') {
+      try { parsed = JSON.parse(raw) } catch { return empty() }
+    }
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return empty()
+    const p = parsed as Partial<CareersDelta>
     return {
-      hiddenIds: Array.isArray(parsed.hiddenIds) ? parsed.hiddenIds : [],
-      manualRoles: Array.isArray(parsed.manualRoles) ? parsed.manualRoles : [],
+      hiddenIds: Array.isArray(p.hiddenIds) ? p.hiddenIds : [],
+      manualRoles: Array.isArray(p.manualRoles) ? p.manualRoles : [],
     }
   } catch {
     return empty()
@@ -28,7 +33,7 @@ export async function loadCareersDelta(): Promise<CareersDelta> {
 
 export async function saveCareersDelta(delta: CareersDelta): Promise<void> {
   const { kv } = await import('@vercel/kv')
-  await kv.set(KV_KEY, JSON.stringify(delta))
+  await kv.set(KV_KEY, delta)
 }
 
 export function mergeCareerOpenings(
