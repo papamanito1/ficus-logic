@@ -309,9 +309,7 @@ export default function CareersContent({ openings }: { openings: HireboundCareer
                 {filteredJobs.map((job) => (
                   <motion.div key={job.id} variants={fadeUp}>
                     <a
-                      href={job.externalUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={`/careers/${encodeURIComponent(job.id)}`}
                       className="card-premium block p-8 lg:p-10 group hover:-translate-y-1 transition-transform duration-500"
                     >
                       <div className="flex items-start justify-between gap-4 mb-4">
@@ -335,11 +333,11 @@ export default function CareersContent({ openings }: { openings: HireboundCareer
                       </div>
 
                       <p className="text-body-sm leading-relaxed mb-6">
-                        {job.summary ? truncate(job.summary, 120) : 'View full description and apply on Hirebound.'}
+                        {job.summary ? truncate(job.summary, 120) : 'Click to view the full role description and apply.'}
                       </p>
 
                       <span className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 group-hover:gap-2.5 transition-all duration-300">
-                        View on Hirebound
+                        View role
                         <svg
                           width="16"
                           height="16"

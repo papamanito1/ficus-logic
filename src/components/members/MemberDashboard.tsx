@@ -51,6 +51,8 @@ export default function MemberDashboard() {
 
   const [careers, setCareers] = useState<CareersPayload | null>(null)
   const [roleForm, setRoleForm] = useState(emptyRoleForm())
+  const [fetchingDetails, setFetchingDetails] = useState(false)
+  const [fetchNote, setFetchNote] = useState<string | null>(null)
 
   const loadInsights = useCallback(async () => {
     const r = await fetch('/api/members/insights')
@@ -131,6 +133,7 @@ export default function MemberDashboard() {
   }
 
   function onHireboundUrlChange(url: string) {
+    setFetchNote(null)
     try {
       const u = new URL(url.trim())
       const match = u.pathname.replace(/\/+$/, '').match(/\/position\/([^/?#]+)$/i)
@@ -140,6 +143,55 @@ export default function MemberDashboard() {
       }
     } catch { /* ignore invalid URL while typing */ }
     setRoleForm((f) => ({ ...f, hireboundUrl: url }))
+  }
+
+  async function autoFillFromUrl() {
+    const url = roleForm.hireboundUrl.trim()
+    if (!url) return
+    setFetchingDetails(true)
+    setFetchNote(null)
+    setError(null)
+    try {
+      const r = await fetch('/api/members/fetch-role-details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      })
+      const data = (await r.json()) as {
+        ok?: boolean
+        error?: string
+        partial?: {
+          title?: string
+          location?: string
+          department?: string
+          employmentType?: string
+          summary?: string
+          postedDate?: string
+        }
+      }
+      const p = data.partial ?? {}
+      const filled = Object.values(p).filter(Boolean).length
+      setRoleForm((f) => ({
+        ...f,
+        title: p.title || f.title,
+        location: p.location || f.location,
+        department: p.department || f.department,
+        employmentType: p.employmentType || f.employmentType,
+        summary: p.summary || f.summary,
+        postedDate: p.postedDate || f.postedDate,
+      }))
+      if (data.error) {
+        setFetchNote(data.error)
+      } else if (filled === 0) {
+        setFetchNote('No details could be extracted automatically. Please fill in the fields below.')
+      } else {
+        setFetchNote(`Auto-filled ${filled} field${filled > 1 ? 's' : ''} from the career page. Review and adjust as needed.`)
+      }
+    } catch {
+      setFetchNote('Could not reach the career page. Fill in the details manually.')
+    } finally {
+      setFetchingDetails(false)
+    }
   }
 
   async function submitRole(e: React.FormEvent) {
@@ -396,25 +448,40 @@ export default function MemberDashboard() {
                 className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-6"
               >
                 {/* Hirebound URL — full width, prominent */}
-                <label className="text-sm">
+                <div className="text-sm">
                   <span className="text-neutral-700 font-medium block mb-1">
                     Hirebound career page URL
-                    <span className="font-normal text-neutral-500 ml-1">(the link you want applicants to visit)</span>
+                    <span className="font-normal text-neutral-500 ml-1">(the link applicants will use to apply)</span>
                   </span>
-                  <input
-                    type="url"
-                    required
-                    className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
-                    placeholder="https://careerpage.hirebound.io/org/ficuslogic/position/…/"
-                    value={roleForm.hireboundUrl}
-                    onChange={(e) => onHireboundUrlChange(e.target.value)}
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="url"
+                      required
+                      className="flex-1 border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                      placeholder="https://careerpage.hirebound.io/org/ficuslogic/position/…/"
+                      value={roleForm.hireboundUrl}
+                      onChange={(e) => onHireboundUrlChange(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => void autoFillFromUrl()}
+                      disabled={!roleForm.hireboundUrl.trim() || fetchingDetails}
+                      className="shrink-0 rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:opacity-40 transition-colors"
+                    >
+                      {fetchingDetails ? 'Fetching…' : 'Auto-fill'}
+                    </button>
+                  </div>
                   {roleForm.id && (
                     <span className="text-xs text-neutral-400 mt-1 block">
-                      Position ID detected: <code>{roleForm.id}</code>
+                      Position ID: <code>{roleForm.id}</code>
                     </span>
                   )}
-                </label>
+                  {fetchNote && (
+                    <p className={`text-xs mt-2 px-3 py-2 rounded-lg ${fetchNote.startsWith('Auto-filled') ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'}`}>
+                      {fetchNote}
+                    </p>
+                  )}
+                </div>
 
                 <div className="border-t border-neutral-100 pt-4">
                   <p className="text-xs text-neutral-500 mb-3 uppercase tracking-wide font-medium">
