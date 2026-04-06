@@ -20,11 +20,11 @@ export const navigation: NavItem[] = [
 
 export const footerNavigation = {
   services: [
+    { label: 'Member login', href: '/members/login' },
     { label: 'Leadership Hiring', href: '/leadership-hiring' },
     { label: 'Niche Mandates', href: '/niche-hiring' },
     { label: 'Industry', href: '/industries' },
     { label: 'Experience FELIX', href: '/somika-ai' },
-    { label: 'Member login', href: '/members/login' },
   ],
   company: [
     { label: 'About Us', href: '/about' },

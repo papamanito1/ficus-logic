@@ -81,7 +81,13 @@ export default function Footer() {
           <p className="text-xs text-neutral-600">
             &copy; 2024 Ficus e-Logic Pvt. Ltd. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <Link
+              href="/members/login"
+              className="text-xs text-neutral-500 hover:text-white transition-colors duration-300"
+            >
+              Member login
+            </Link>
             {footerNavigation.legal.map((item) => (
               <Link
                 key={item.href}
