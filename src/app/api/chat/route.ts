@@ -1,5 +1,8 @@
 import { streamText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { isAllowedFelixEmail } from '@/lib/felix-access'
 import { FELIX_SYSTEM_PROMPT } from '@/lib/sam-prompt'
 
 const openrouter = createOpenAI({
@@ -10,6 +13,14 @@ const openrouter = createOpenAI({
 const MODEL = process.env.SOMIKA_MODEL ?? 'google/gemini-2.5-flash'
 
 export async function POST(req: Request) {
+  const session = await getServerSession(authOptions)
+  if (!isAllowedFelixEmail(session?.user?.email)) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
+
   const { messages } = await req.json()
 
   const result = streamText({

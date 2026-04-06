@@ -184,7 +184,7 @@ export default function ChatSidebar({
                 </div>
               ) : (
                 <button
-                  onClick={() => signIn('google')}
+                  onClick={() => signIn('google', { callbackUrl: '/somika-ai/chat' })}
                   className="w-full flex items-center justify-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white text-neutral-900 text-[13px] font-medium hover:bg-neutral-100 transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24">
