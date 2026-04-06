@@ -15,7 +15,6 @@ export const navigation: NavItem[] = [
   { label: 'Insights', href: '/insights' },
   { label: 'Contact Us', href: '/contact' },
   { label: 'Experience FELIX', href: '/somika-ai' },
-  { label: 'Member login', href: '/members/login' },
 ]
 
 export const footerNavigation = {

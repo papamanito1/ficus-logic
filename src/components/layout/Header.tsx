@@ -60,34 +60,26 @@ export default function Header({ transparent: _transparent = true }: HeaderProps
               />
             </Link>
 
-            {/* Desktop navigation — member login is beside CTA so it is not clipped when the bar is full */}
-            <nav className="hidden lg:flex min-w-0 flex-1 items-center justify-end gap-1 pr-2 xl:gap-1.5 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-              {navigation
-                .filter((item) => item.href !== '/members/login')
-                .map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    {...(item.openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                    className={cn(
-                      'shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-[12px] font-medium tracking-[0.02em] text-neutral-500',
-                      'transition-colors duration-200 hover:bg-neutral-100/90 hover:text-neutral-900',
-                      'xl:px-3.5 xl:text-[13px]',
-                    )}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+            {/* Desktop navigation */}
+            <nav className="hidden lg:flex flex-1 items-center justify-end gap-1 pr-2 xl:gap-1.5">
+              {navigation.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  {...(item.openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  className={cn(
+                    'whitespace-nowrap rounded-full px-3 py-2 text-[12px] font-medium tracking-[0.02em] text-neutral-500',
+                    'transition-colors duration-200 hover:bg-neutral-100/90 hover:text-neutral-900',
+                    'xl:px-3.5 xl:text-[13px]',
+                  )}
+                >
+                  {item.label}
+                </Link>
+              ))}
             </nav>
 
-            {/* Desktop: Member login + CTA (always visible) */}
-            <div className="hidden lg:flex shrink-0 items-center gap-3 pl-2">
-              <Link
-                href="/members/login"
-                className="shrink-0 whitespace-nowrap text-[12px] font-medium tracking-wide text-neutral-500 underline-offset-4 hover:text-neutral-900 hover:underline xl:text-[13px]"
-              >
-                Member login
-              </Link>
+            {/* Desktop CTA */}
+            <div className="hidden lg:block shrink-0 pl-1">
               <Link
                 href="/contact"
                 className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-5 py-2.5 text-[13px] font-medium tracking-wide text-white shadow-sm ring-1 ring-neutral-900/5 transition-all duration-300 hover:bg-neutral-800 hover:shadow-md hover:ring-neutral-900/10"
