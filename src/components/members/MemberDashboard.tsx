@@ -30,7 +30,6 @@ const emptyInsightForm = {
 }
 
 const emptyRoleForm = () => ({
-  hireboundUrl: '',
   id: '',
   title: '',
   location: '',
@@ -44,6 +43,7 @@ const emptyRoleForm = () => ({
   note: '',
   hiringFor: '',
   tags: '',
+  externalUrl: '',
 })
 
 export default function MemberDashboard() {
@@ -57,8 +57,9 @@ export default function MemberDashboard() {
 
   const [careers, setCareers] = useState<CareersPayload | null>(null)
   const [roleForm, setRoleForm] = useState(emptyRoleForm())
-  const [fetchingDetails, setFetchingDetails] = useState(false)
-  const [fetchNote, setFetchNote] = useState<string | null>(null)
+  const [pastedText, setPastedText] = useState('')
+  const [extracting, setExtracting] = useState(false)
+  const [extractNote, setExtractNote] = useState<string | null>(null)
 
   const loadInsights = useCallback(async () => {
     const r = await fetch('/api/members/insights')
@@ -138,87 +139,63 @@ export default function MemberDashboard() {
     if (ok) await loadCareers()
   }
 
-  function onHireboundUrlChange(url: string) {
-    setFetchNote(null)
-    try {
-      const u = new URL(url.trim())
-      const match = u.pathname.replace(/\/+$/, '').match(/\/position\/([^/?#]+)$/i)
-      if (match) {
-        setRoleForm((f) => ({ ...f, hireboundUrl: url, id: match[1] }))
-        return
-      }
-    } catch { /* ignore invalid URL while typing */ }
-    setRoleForm((f) => ({ ...f, hireboundUrl: url }))
-  }
-
-  async function autoFillFromUrl() {
-    const url = roleForm.hireboundUrl.trim()
-    if (!url) return
-    setFetchingDetails(true)
-    setFetchNote(null)
+  async function extractWithAI() {
+    const text = pastedText.trim()
+    if (!text) { setError('Paste the role content first.'); return }
+    setExtracting(true)
+    setExtractNote(null)
     setError(null)
     try {
-      const r = await fetch('/api/members/fetch-role-details', {
+      const r = await fetch('/api/members/extract-role', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ rawText: text }),
       })
       const data = (await r.json()) as {
         ok?: boolean
         error?: string
-        partial?: {
-          title?: string
-          location?: string
-          department?: string
-          employmentType?: string
-          summary?: string
-          postedDate?: string
-        }
+        role?: Record<string, unknown>
       }
-      const p = data.partial ?? {}
-      const filled = Object.values(p).filter(Boolean).length
+      if (!r.ok || data.error) {
+        setError(data.error ?? 'AI extraction failed.')
+        return
+      }
+      const p = data.role ?? {}
       setRoleForm((f) => ({
         ...f,
-        title: p.title || f.title,
-        location: p.location || f.location,
-        department: p.department || f.department,
-        employmentType: p.employmentType || f.employmentType,
-        summary: p.summary || f.summary,
-        postedDate: p.postedDate || f.postedDate,
+        title: (p.title as string) || f.title,
+        location: (p.location as string) || f.location,
+        department: (p.department as string) || f.department,
+        employmentType: (p.employmentType as string) || f.employmentType,
+        summary: (p.summary as string) || f.summary,
+        experience: (p.experience as string) || f.experience,
+        applyEmail: (p.applyEmail as string) || f.applyEmail,
+        industry: (p.industry as string) || f.industry,
+        note: (p.note as string) || f.note,
+        hiringFor: (p.hiringFor as string) || f.hiringFor,
+        externalUrl: (p.externalUrl as string) || f.externalUrl,
+        tags: Array.isArray(p.tags) ? (p.tags as string[]).join(', ') : f.tags,
       }))
-      if (data.error) {
-        setFetchNote(data.error)
-      } else if (filled === 0) {
-        setFetchNote('No details could be extracted automatically. Please fill in the fields below.')
-      } else {
-        setFetchNote(`Auto-filled ${filled} field${filled > 1 ? 's' : ''} from the career page. Review and adjust as needed.`)
-      }
+      const filled = Object.values(p).filter(Boolean).length
+      setExtractNote(`AI extracted ${filled} field${filled !== 1 ? 's' : ''}. Review the details below and adjust if needed, then click "Add to careers page".`)
     } catch {
-      setFetchNote('Could not reach the career page. Fill in the details manually.')
+      setError('AI extraction failed. Check your connection and try again.')
     } finally {
-      setFetchingDetails(false)
+      setExtracting(false)
     }
   }
 
   async function submitRole(e: React.FormEvent) {
     e.preventDefault()
-    const url = roleForm.hireboundUrl.trim()
-    const idFromUrl = (() => {
-      try {
-        const u = new URL(url)
-        const m = u.pathname.replace(/\/+$/, '').match(/\/position\/([^/?#]+)$/i)
-        return m ? m[1] : ''
-      } catch { return '' }
-    })()
     const role: HireboundCareerOpening = {
-      id: roleForm.id.trim() || idFromUrl || `role-${Date.now()}`,
+      id: roleForm.id.trim() || `role-${Date.now()}`,
       title: roleForm.title.trim(),
       location: roleForm.location.trim() || 'India',
       department: roleForm.department.trim() || 'Ficus Logic',
       employmentType: roleForm.employmentType.trim() || 'Full-time',
       postedDate: roleForm.postedDate.trim(),
       summary: roleForm.summary.trim(),
-      externalUrl: url || 'https://careerpage.hirebound.io/org/ficuslogic',
+      externalUrl: roleForm.externalUrl.trim() || '',
       experience: roleForm.experience.trim() || undefined,
       applyEmail: roleForm.applyEmail.trim() || undefined,
       industry: roleForm.industry.trim() || undefined,
@@ -227,7 +204,7 @@ export default function MemberDashboard() {
       tags: roleForm.tags.trim() ? roleForm.tags.split(',').map((t) => t.trim()).filter(Boolean) : undefined,
     }
     const ok = await postJson('/api/members/careers', { action: 'upsertManual', role })
-    if (ok) { setRoleForm(emptyRoleForm()); await loadCareers() }
+    if (ok) { setRoleForm(emptyRoleForm()); setPastedText(''); setExtractNote(null); await loadCareers() }
   }
 
   const hiddenSet = careers ? new Set(careers.delta.hiddenIds) : new Set()
@@ -452,53 +429,58 @@ export default function MemberDashboard() {
             <section>
               <h2 className="text-lg font-medium text-neutral-900 mb-1">Add a role to the careers page</h2>
               <p className="text-sm text-neutral-500 mb-4">
-                Paste the Hirebound career page link — it becomes the &ldquo;Apply&rdquo; button. Then fill
-                in the job details exactly as they appear on that page.
+                Copy-paste the entire job listing (from LinkedIn, Hirebound, email, etc.) and let AI
+                extract the details. Review the result and publish.
               </p>
+
+              {/* Step 1: Paste + AI extract */}
+              <div className="rounded-xl border border-neutral-200 bg-white p-6 mb-4 space-y-4">
+                <div>
+                  <p className="text-sm font-medium text-neutral-800 mb-1">Step 1 — Paste the role content</p>
+                  <p className="text-xs text-neutral-500">
+                    Copy everything from the career page / LinkedIn post / email and paste it below.
+                  </p>
+                </div>
+                <textarea
+                  rows={8}
+                  className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                  placeholder="Paste the full job posting text here…"
+                  value={pastedText}
+                  onChange={(e) => setPastedText(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => void extractWithAI()}
+                  disabled={!pastedText.trim() || extracting}
+                  className="inline-flex items-center gap-2 rounded-lg bg-accent-700 hover:bg-accent-600 text-white text-sm font-medium px-5 py-2.5 disabled:opacity-40 transition-colors"
+                >
+                  {extracting ? (
+                    <>
+                      <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      AI is extracting…
+                    </>
+                  ) : (
+                    <>✨ Extract with AI</>
+                  )}
+                </button>
+                {extractNote && (
+                  <p className="text-xs px-3 py-2 rounded-lg bg-green-50 text-green-700">
+                    {extractNote}
+                  </p>
+                )}
+              </div>
+
+              {/* Step 2: Review + submit */}
               <form
                 onSubmit={(e) => void submitRole(e)}
                 className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-6"
               >
-                {/* Hirebound URL — full width, prominent */}
-                <div className="text-sm">
-                  <span className="text-neutral-700 font-medium block mb-1">
-                    Hirebound career page URL
-                    <span className="font-normal text-neutral-500 ml-1">(the link applicants will use to apply)</span>
-                  </span>
-                  <div className="flex gap-2">
-                    <input
-                      type="url"
-                      required
-                      className="flex-1 border border-neutral-300 rounded-lg px-3 py-2 text-sm"
-                      placeholder="https://careerpage.hirebound.io/org/ficuslogic/position/…/"
-                      value={roleForm.hireboundUrl}
-                      onChange={(e) => onHireboundUrlChange(e.target.value)}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => void autoFillFromUrl()}
-                      disabled={!roleForm.hireboundUrl.trim() || fetchingDetails}
-                      className="shrink-0 rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:opacity-40 transition-colors"
-                    >
-                      {fetchingDetails ? 'Fetching…' : 'Auto-fill'}
-                    </button>
-                  </div>
-                  {roleForm.id && (
-                    <span className="text-xs text-neutral-400 mt-1 block">
-                      Position ID: <code>{roleForm.id}</code>
-                    </span>
-                  )}
-                  {fetchNote && (
-                    <p className={`text-xs mt-2 px-3 py-2 rounded-lg ${fetchNote.startsWith('Auto-filled') ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'}`}>
-                      {fetchNote}
-                    </p>
-                  )}
-                </div>
-
-                <div className="border-t border-neutral-100 pt-4">
-                  <p className="text-xs text-neutral-500 mb-3 uppercase tracking-wide font-medium">
-                    Job details — enter these from the Hirebound page
+                <div>
+                  <p className="text-sm font-medium text-neutral-800 mb-1">Step 2 — Review &amp; publish</p>
+                  <p className="text-xs text-neutral-500">
+                    Verify the AI-extracted details below. Adjust anything, then click &ldquo;Add to careers page&rdquo;.
                   </p>
+                </div>
                   <div className="grid gap-4">
                     <label className="text-sm">
                       <span className="text-neutral-600 block mb-1">Job title <span className="text-red-500">*</span></span>
@@ -618,7 +600,7 @@ export default function MemberDashboard() {
                       />
                     </label>
                     <label className="text-sm">
-                      <span className="text-neutral-600 block mb-1">Tags (comma-separated hashtags)</span>
+                      <span className="text-neutral-600 block mb-1">Tags (comma-separated)</span>
                       <input
                         className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
                         placeholder="e.g. Hiring, Presales, Mobility, Bangalore"
@@ -626,8 +608,17 @@ export default function MemberDashboard() {
                         onChange={(e) => setRoleForm((f) => ({ ...f, tags: e.target.value }))}
                       />
                     </label>
+                    <label className="text-sm">
+                      <span className="text-neutral-600 block mb-1">Apply / external URL (optional)</span>
+                      <input
+                        type="url"
+                        className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm"
+                        placeholder="e.g. https://careerpage.hirebound.io/org/ficuslogic/position/…"
+                        value={roleForm.externalUrl}
+                        onChange={(e) => setRoleForm((f) => ({ ...f, externalUrl: e.target.value }))}
+                      />
+                    </label>
                   </div>
-                </div>
 
                 <Button type="submit" variant="primary" disabled={!careers.kvConfigured}>
                   Add to careers page
